@@ -181,6 +181,33 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 #scorecard .grade{font-size:20px;font-weight:700}
 #scorecard button{margin-top:14px;background:#fff;color:var(--brand2);border:none;border-radius:9px;padding:10px 20px;font-weight:600;cursor:pointer}
 .footer{color:var(--muted);font-size:12px;text-align:center;padding:30px 0 10px;border-top:1px solid var(--line);margin-top:30px}
+/* ===== abbreviation tooltips ===== */
+.abbr{border-bottom:1px dotted currentColor;cursor:help;position:relative;outline:none}
+.abbr::after{content:attr(data-exp);position:absolute;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%);
+ background:#241526;color:#fff;border:1px solid #4a2d4f;border-radius:8px;padding:7px 11px;font-size:12.5px;font-weight:500;
+ font-style:normal;line-height:1.35;white-space:normal;width:max-content;max-width:240px;text-align:center;
+ box-shadow:0 6px 22px rgba(20,8,22,.4);opacity:0;visibility:hidden;transition:opacity .12s;z-index:200;pointer-events:none}
+.abbr::before{content:"";position:absolute;left:50%;bottom:calc(100% + 2px);transform:translateX(-50%);
+ border:6px solid transparent;border-top-color:#241526;opacity:0;visibility:hidden;transition:opacity .12s;z-index:200}
+.abbr:hover::after,.abbr:focus::after,.abbr:hover::before,.abbr:focus::before{opacity:1;visibility:visible}
+.mcq-block .abbr,.mcq .abbr{color:#ffe1b0;border-bottom-color:#ffe1b0}
+/* ===== abbreviation legend modal ===== */
+#abbrModal{display:none;position:fixed;inset:0;z-index:120;align-items:flex-start;justify-content:center}
+#abbrModal.show{display:flex}
+#abbrModal .abkdrop{position:absolute;inset:0;background:rgba(20,8,22,.5)}
+#abbrModal .abbox{position:relative;background:var(--panel);width:min(640px,92vw);max-height:84vh;margin-top:6vh;border-radius:16px;
+ box-shadow:0 20px 60px rgba(20,8,22,.4);display:flex;flex-direction:column;overflow:hidden}
+#abbrModal .abhead{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+#abbrModal .abhead h3{margin:0;font-size:17px;color:var(--brand2)}
+#abbrModal .abhead .abx{margin-left:auto;background:none;border:1px solid var(--line);border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer;color:var(--muted)}
+#abbrModal .abhead .abx:hover{background:#f7f0f4}
+#abbrModal #abbrFilter{flex:1 1 auto;max-width:260px;padding:7px 11px;border:1px solid var(--line);border-radius:8px;font-size:13px}
+#abbrModal .ablist{overflow-y:auto;padding:10px 14px 18px;display:grid;grid-template-columns:1fr 1fr;gap:2px 22px}
+#abbrModal .abrow{padding:6px 4px;border-bottom:1px solid #f0ecf3;font-size:13.3px;line-height:1.35}
+#abbrModal .abrow b{color:var(--brand2);font-weight:700}
+#abbrModal .abrow.hide{display:none}
+#abbrModal .abnote{padding:0 20px 8px;font-size:11.5px;color:var(--muted);font-style:italic}
+@media(max-width:640px){#abbrModal .ablist{grid-template-columns:1fr}}
 @media(max-width:900px){
  #sidebar{position:fixed;left:0;top:0;z-index:60;transform:translateX(-100%);transition:transform .2s}
  #sidebar.open{transform:translateX(0)}
@@ -223,6 +250,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
  <div class="navsec">Exam</div>
  <ul><li><a href="#mock-section" class="navlink" data-target="mock-section">Mock Exams (A &amp; B)</a></li></ul>
  <div class="navsec">Tools</div>
+ <button class="navtool" id="openAbbr">&#128214; Abbreviations (A&ndash;Z)</button>
  <button class="navtool" id="expandAll">Expand all topics</button>
  <button class="navtool" id="collapseAll">Collapse all topics</button>
 </aside>
@@ -249,6 +277,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
      <div class="intro-actions">
        <button class="cta" onclick="document.getElementById('mock-section').scrollIntoView()">&#9654; Start a Mock Exam</button>
        <button class="ghost" onclick="var s=document.getElementById('search');s.scrollIntoView();s.focus()">&#128269; Search topics</button>
+       <button class="ghost" id="openAbbr2">&#128214; Abbreviations</button>
      </div>
      <details class="howto"><summary>How to use it &#9662;</summary>
        <p>Everything starts collapsed as folders &mdash; tap a coloured section (rose = Obstetrics, plum = Gynaecology) to open it, then tap any topic inside. Skim the definition, the comparison table and the amber MCQ pearls, then do the 5 questions at the end of each section. Finish with the two 90-minute mock papers (A &amp; B), each 35 Obstetrics + 35 Gynaecology.</p></details>
@@ -3248,6 +3277,18 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
  </div>
 </div>
 </div>
+<div id="abbrModal" class="no-abbr" role="dialog" aria-label="Abbreviations">
+  <div class="abkdrop" id="abbrDrop"></div>
+  <div class="abbox">
+    <div class="abhead">
+      <h3>Abbreviations</h3>
+      <input id="abbrFilter" placeholder="Filter (e.g. LMP, hCG)…">
+      <button class="abx" id="abbrClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="abnote">Hover any underlined abbreviation in the text to see this instantly. Tap one on mobile.</div>
+    <div class="ablist" id="abbrList"></div>
+  </div>
+</div>
 <script>
 var ham=document.getElementById('hamburger'), sb=document.getElementById('sidebar');
 var backdrop=document.getElementById('sb-backdrop');
@@ -3377,6 +3418,7 @@ function buildMock(){
    });
  });
  var fb=document.getElementById('flagsBtn'); if(fb) fb.classList.remove('active');
+ if(typeof wrapAbbr==='function') wrapAbbr(host);
  updateFlagCount();
 }
 function updateFlagCount(){
@@ -3455,5 +3497,64 @@ document.getElementById('startMockA').onclick=function(){startMock('A')};
 document.getElementById('startMockB').onclick=function(){startMock('B')};
 document.getElementById('flagsBtn').onclick=toggleFlagReview;
 document.getElementById('gradeBtn').onclick=function(){ if(confirm('Grade the exam now?')) gradeMock(false); };
+// ---- ABBREVIATIONS: hover tooltips + legend ----
+var GLOSSARY={"IV": "Intravenous", "IM": "Intramuscular", "SC": "Subcutaneous", "PV": "Per Vagina (vaginal)", "TDS": "Three times a day", "QDS": "Four times a day", "QID": "Four times a day", "BD": "Twice a day", "IU": "International Units", "FSH": "Follicle-Stimulating Hormone", "LH": "Luteinizing Hormone", "hCG": "Human Chorionic Gonadotropin", "HCG": "Human Chorionic Gonadotropin", "β-hCG": "Beta Human Chorionic Gonadotropin", "βhCG": "Beta Human Chorionic Gonadotropin", "TSH": "Thyroid-Stimulating Hormone", "AMH": "Anti-Müllerian Hormone", "HPL": "Human Placental Lactogen", "SHBG": "Sex Hormone-Binding Globulin", "TBG": "Thyroxine-Binding Globulin", "DHT": "Dihydrotestosterone", "E2": "Estradiol", "T3": "Triiodothyronine", "T4": "Thyroxine", "PG": "Prostaglandin", "PGE1": "Prostaglandin E1", "PGE2": "Prostaglandin E2", "DHEA": "Dehydroepiandrosterone", "HRT": "Hormone Replacement Therapy", "OCP": "Oral Contraceptive Pill", "COCP": "Combined Oral Contraceptive Pill", "COC": "Combined Oral Contraceptive", "POP": "Pelvic Organ Prolapse (or Progestogen-Only Pill)", "LNG": "Levonorgestrel", "IUS": "Intrauterine System", "IUD": "Intrauterine Device", "IUCD": "Intrauterine Contraceptive Device", "DMPA": "Depot Medroxyprogesterone Acetate", "EC": "Emergency Contraception", "UPA": "Ulipristal Acetate", "LAM": "Lactational Amenorrhoea Method", "UKMEC": "UK Medical Eligibility Criteria", "SERM": "Selective Estrogen Receptor Modulator", "CEE": "Conjugated Equine Estrogen", "DES": "Diethylstilbestrol", "GSM": "Genitourinary Syndrome of Menopause", "LMP": "Last Menstrual Period", "EDD": "Estimated Date of Delivery", "GA": "Gestational Age", "FMP": "Final Menstrual Period", "ANC": "Antenatal Care", "CS": "Caesarean Section", "LUSCS": "Lower Uterine Segment Caesarean Section", "LUS": "Lower Uterine Segment", "VBAC": "Vaginal Birth After Caesarean", "OVD": "Operative Vaginal Delivery", "VD": "Vaginal Delivery", "IOL": "Induction Of Labour", "AROM": "Artificial Rupture Of Membranes", "ARM": "Artificial Rupture of Membranes", "ROM": "Rupture Of Membranes", "PROM": "Premature Rupture Of Membranes", "PPROM": "Preterm Premature Rupture Of Membranes", "PTL": "Preterm Labour", "PTB": "Preterm Birth", "CPD": "Cephalopelvic Disproportion", "ECV": "External Cephalic Version", "OA": "Occiput Anterior", "OP": "Occiput Posterior", "OT": "Occiput Transverse", "FTP": "Failure To Progress", "CTG": "Cardiotocography", "EFM": "Electronic Fetal Monitoring", "FHR": "Fetal Heart Rate", "FBS": "Fetal Blood Sampling", "BPP": "Biophysical Profile", "AFI": "Amniotic Fluid Index", "DVP": "Deepest Vertical Pocket", "PSV": "Peak Systolic Velocity", "MCA": "Middle Cerebral Artery", "APH": "Antepartum Haemorrhage", "PPH": "Postpartum Haemorrhage", "RPOC": "Retained Products Of Conception", "POC": "Products Of Conception", "RDS": "Respiratory Distress Syndrome", "GBS": "Group B Streptococcus", "SFH": "Symphysis-Fundal Height", "IUGR": "Intrauterine Growth Restriction", "FGR": "Fetal Growth Restriction", "SGA": "Small for Gestational Age", "LGA": "Large for Gestational Age", "LBW": "Low Birth Weight", "AC": "Abdominal Circumference", "BPD": "Biparietal Diameter", "HC": "Head Circumference", "FL": "Femur Length", "CRL": "Crown-Rump Length", "OFC": "Occipitofrontal Circumference", "NT": "Nuchal Translucency", "AFP": "Alpha-Fetoprotein", "MSAFP": "Maternal Serum Alpha-Fetoprotein", "PAPP": "Pregnancy-Associated Plasma Protein-A", "NTD": "Neural Tube Defect", "CVS": "Chorionic Villus Sampling", "NIPT": "Non-Invasive Prenatal Testing", "TORCH": "Toxoplasma, Other, Rubella, CMV, Herpes", "CMV": "Cytomegalovirus", "TTTS": "Twin-to-Twin Transfusion Syndrome", "TAPS": "Twin Anaemia-Polycythaemia Sequence", "TRAP": "Twin Reversed Arterial Perfusion", "MCDA": "Monochorionic Diamniotic", "DCDA": "Dichorionic Diamniotic", "MCMA": "Monochorionic Monoamniotic", "IUFD": "Intrauterine Fetal Death", "IUT": "Intrauterine Transfusion", "IUP": "Intrauterine Pregnancy", "HTN": "Hypertension", "BP": "Blood Pressure", "SBP": "Systolic Blood Pressure", "DBP": "Diastolic Blood Pressure", "PET": "Pre-eclampsia (toxaemia)", "PE": "Pulmonary Embolism", "HELLP": "Haemolysis, Elevated Liver enzymes, Low Platelets", "DM": "Diabetes Mellitus", "GDM": "Gestational Diabetes Mellitus", "OGTT": "Oral Glucose Tolerance Test", "GTT": "Glucose Tolerance Test", "IADPSG": "International Association of Diabetes & Pregnancy Study Groups", "HbA1c": "Glycated Haemoglobin", "RBS": "Random Blood Sugar", "VTE": "Venous Thromboembolism", "DVT": "Deep Vein Thrombosis", "LMWH": "Low-Molecular-Weight Heparin", "UFH": "Unfractionated Heparin", "CTPA": "CT Pulmonary Angiogram", "FVL": "Factor V Leiden", "APS": "Antiphospholipid Syndrome", "DIC": "Disseminated Intravascular Coagulation", "ITP": "Immune Thrombocytopenic Purpura", "RPL": "Recurrent Pregnancy Loss", "FMH": "Fetomaternal Haemorrhage", "Hb": "Haemoglobin", "IDA": "Iron-Deficiency Anaemia", "SCA": "Sickle Cell Anaemia", "SCD": "Sickle Cell Disease", "Rh": "Rhesus (blood-group factor)", "anti-D": "Anti-D (Rhesus) Immunoglobulin", "ABO": "ABO blood-group system", "PPCM": "Peripartum Cardiomyopathy", "SLE": "Systemic Lupus Erythematosus", "PTU": "Propylthiouracil", "ICP": "Intrahepatic Cholestasis of Pregnancy", "MTX": "Methotrexate", "HM": "Hydatidiform Mole", "GTD": "Gestational Trophoblastic Disease", "GTN": "Gestational Trophoblastic Neoplasia", "PSTT": "Placental Site Trophoblastic Tumour", "FIGO": "International Federation of Gynaecology & Obstetrics", "PCOS": "Polycystic Ovary Syndrome", "POI": "Premature Ovarian Insufficiency", "HPO": "Hypothalamic-Pituitary-Ovarian axis", "HPG": "Hypothalamic-Pituitary-Gonadal axis", "CAH": "Congenital Adrenal Hyperplasia", "CAIS": "Complete Androgen Insensitivity Syndrome", "AIS": "Adenocarcinoma In Situ", "MRKSH": "Mayer-Rokitansky-Küster-Hauser syndrome", "MRKH": "Mayer-Rokitansky-Küster-Hauser syndrome", "SRY": "Sex-determining Region Y", "AUB": "Abnormal Uterine Bleeding", "HMB": "Heavy Menstrual Bleeding", "MBL": "Menstrual Blood Loss", "IMB": "Intermenstrual Bleeding", "PCB": "Postcoital Bleeding", "PMB": "Postmenopausal Bleeding", "PALM": "PALM-COEIN (structural AUB causes)", "COEIN": "PALM-COEIN (non-structural AUB causes)", "IVF": "In Vitro Fertilisation", "ICSI": "Intracytoplasmic Sperm Injection", "IUI": "Intrauterine Insemination", "HSG": "Hysterosalpingography", "OHSS": "Ovarian Hyperstimulation Syndrome", "PGT": "Preimplantation Genetic Testing", "OAT": "Oligo-Astheno-Teratospermia", "SVR": "Sustained Virologic Response", "PID": "Pelvic Inflammatory Disease", "TOA": "Tubo-Ovarian Abscess", "STI": "Sexually Transmitted Infection", "BV": "Bacterial Vaginosis", "TV": "Trichomonas Vaginalis", "HPV": "Human Papillomavirus", "CIN": "Cervical Intraepithelial Neoplasia", "SCJ": "Squamocolumnar Junction", "TZ": "Transformation Zone", "LEEP": "Loop Electrosurgical Excision Procedure", "LLETZ": "Large Loop Excision of the Transformation Zone", "ECC": "Endocervical Curettage", "LSIL": "Low-grade Squamous Intraepithelial Lesion", "HSIL": "High-grade Squamous Intraepithelial Lesion", "ASC": "Atypical Squamous Cells", "AGC": "Atypical Glandular Cells", "RMI": "Risk of Malignancy Index", "CA-125": "Cancer Antigen 125", "CA125": "Cancer Antigen 125", "CEA": "Carcinoembryonic Antigen", "CA": "Carcinoma / Cancer", "LDH": "Lactate Dehydrogenase", "TAH": "Total Abdominal Hysterectomy", "BSO": "Bilateral Salpingo-Oophorectomy", "LAVH": "Laparoscopic-Assisted Vaginal Hysterectomy", "LND": "Lymph Node Dissection", "LN": "Lymph Node", "UAE": "Uterine Artery Embolisation", "BRCA1": "Breast Cancer gene 1", "BRCA2": "Breast Cancer gene 2", "SUI": "Stress Urinary Incontinence", "UUI": "Urge Urinary Incontinence", "USI": "Urodynamic Stress Incontinence", "OAB": "Overactive Bladder", "UDS": "Urodynamic Study", "PVR": "Post-Void Residual", "TVT": "Tension-free Vaginal Tape", "TOT": "Transobturator Tape", "PFMT": "Pelvic Floor Muscle Training", "ISD": "Intrinsic Sphincter Deficiency", "US": "Ultrasound", "USS": "Ultrasound Scan", "TVS": "Transvaginal Sonography", "TVU": "Transvaginal Ultrasound", "TVUS": "Transvaginal Ultrasound", "MRI": "Magnetic Resonance Imaging", "DEXA": "Dual-Energy X-ray Absorptiometry", "BMD": "Bone Mineral Density", "CXR": "Chest X-Ray", "BMI": "Body Mass Index", "UTI": "Urinary Tract Infection", "NICE": "National Institute for Health & Care Excellence", "RCOG": "Royal College of Obstetricians & Gynaecologists", "WHO": "World Health Organization", "FDA": "Food and Drug Administration", "NICU": "Neonatal Intensive Care Unit", "FBC": "Full Blood Count", "CBC": "Complete Blood Count", "LFT": "Liver Function Test", "TFT": "Thyroid Function Test", "CRP": "C-Reactive Protein", "AST": "Aspartate Aminotransferase", "ALT": "Alanine Aminotransferase", "ALP": "Alkaline Phosphatase", "GGT": "Gamma-Glutamyl Transferase", "BUN": "Blood Urea Nitrogen", "GFR": "Glomerular Filtration Rate", "RPF": "Renal Plasma Flow", "CO": "Cardiac Output", "HR": "Heart Rate", "CKD": "Chronic Kidney Disease", "INR": "International Normalised Ratio", "APTT": "Activated Partial Thromboplastin Time", "PT": "Prothrombin Time", "AT": "Antithrombin", "FFP": "Fresh Frozen Plasma", "PRBC": "Packed Red Blood Cells", "TXA": "Tranexamic Acid", "NSAID": "Non-Steroidal Anti-Inflammatory Drug", "SSRI": "Selective Serotonin Reuptake Inhibitor", "SNRI": "Serotonin-Norepinephrine Reuptake Inhibitor", "LDL": "Low-Density Lipoprotein", "HDL": "High-Density Lipoprotein", "KOH": "Potassium Hydroxide", "VDRL": "Venereal Disease Research Laboratory test", "HIV": "Human Immunodeficiency Virus", "HBV": "Hepatitis B Virus", "HCV": "Hepatitis C Virus", "MMR": "Measles, Mumps, Rubella vaccine", "MRSA": "Methicillin-Resistant Staphylococcus Aureus", "CNS": "Central Nervous System", "RUQ": "Right Upper Quadrant", "PPD": "Postpartum Depression", "BF": "Breastfeeding", "RF": "Risk Factor", "SE": "Side Effect", "MC": "Most Common", "FMR1": "Fragile X Mental Retardation 1 gene", "VSD": "Ventricular Septal Defect", "CHD": "Congenital Heart Disease", "XX": "Female karyotype (46,XX)", "XY": "Male karyotype (46,XY)", "XO": "Turner karyotype (45,X)", "XXY": "Klinefelter karyotype (47,XXY)", "MCQ": "Multiple-Choice Question"};
+var _abk=Object.keys(GLOSSARY).sort(function(a,b){return b.length-a.length;});
+function _escRe(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+var _body='(G\\d+P\\d+|'+_abk.map(_escRe).join('|')+')';
+var ABBR_RX;
+try{ ABBR_RX=new RegExp('(?<![A-Za-z0-9])'+_body+'(?![A-Za-z0-9])','g'); }
+catch(e){ ABBR_RX=new RegExp('\\b'+_body+'(?![A-Za-z0-9])','g'); }  // fallback for browsers without lookbehind
+function abbrExp(tok){ if(GLOSSARY[tok]) return GLOSSARY[tok]; if(/^G\d+P\d+$/.test(tok)) return 'Gravida / Para — obstetric history'; return null; }
+function wrapAbbr(root){
+ if(!root) return;
+ var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+   if(!n.nodeValue||!n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+   var p=n.parentNode;
+   while(p&&p!==root.parentNode){
+     if(p.nodeType===1){
+       var t=p.tagName;
+       if(t==='SCRIPT'||t==='STYLE'||t==='BUTTON'||t==='INPUT'||t==='SUMMARY') return NodeFilter.FILTER_REJECT;
+       if(p.classList&&(p.classList.contains('abbr')||p.classList.contains('no-abbr'))) return NodeFilter.FILTER_REJECT;
+     }
+     p=p.parentNode;
+   }
+   return NodeFilter.FILTER_ACCEPT;
+ }});
+ var nodes=[],nd; while(nd=walker.nextNode()) nodes.push(nd);
+ nodes.forEach(function(node){
+   var txt=node.nodeValue; ABBR_RX.lastIndex=0;
+   if(!ABBR_RX.test(txt)) return;
+   ABBR_RX.lastIndex=0;
+   var frag=document.createDocumentFragment(),last=0,m;
+   while(m=ABBR_RX.exec(txt)){
+     var tok=m[0],exp=abbrExp(tok); if(exp==null) continue;
+     if(m.index>last) frag.appendChild(document.createTextNode(txt.slice(last,m.index)));
+     var sp=document.createElement('span'); sp.className='abbr'; sp.tabIndex=0; sp.setAttribute('data-exp',exp); sp.textContent=tok;
+     frag.appendChild(sp); last=m.index+tok.length;
+   }
+   if(last>0){ if(last<txt.length) frag.appendChild(document.createTextNode(txt.slice(last))); node.parentNode.replaceChild(frag,node); }
+ });
+}
+try{ wrapAbbr(document.querySelector('.wrap')); }catch(e){}
+// build legend list
+(function(){
+ var list=document.getElementById('abbrList'); if(!list) return;
+ Object.keys(GLOSSARY).sort().forEach(function(k){
+   var d=document.createElement('div'); d.className='abrow'; d.innerHTML='<b>'+k+'</b> &mdash; '+GLOSSARY[k]; list.appendChild(d);
+ });
+})();
+function openAbbr(){ var m=document.getElementById('abbrModal'); m.classList.add('show'); var f=document.getElementById('abbrFilter'); if(f){f.value='';f.focus();filterAbbr();} }
+function closeAbbr(){ document.getElementById('abbrModal').classList.remove('show'); }
+function filterAbbr(){
+ var q=document.getElementById('abbrFilter').value.trim().toLowerCase();
+ document.querySelectorAll('#abbrList .abrow').forEach(function(r){ r.classList.toggle('hide', q.length>0 && r.textContent.toLowerCase().indexOf(q)===-1); });
+}
+var _ao=document.getElementById('openAbbr'), _ao2=document.getElementById('openAbbr2');
+if(_ao) _ao.onclick=openAbbr; if(_ao2) _ao2.onclick=openAbbr;
+var _ax=document.getElementById('abbrClose'); if(_ax) _ax.onclick=closeAbbr;
+var _abd=document.getElementById('abbrDrop'); if(_abd) _abd.onclick=closeAbbr;
+var _af=document.getElementById('abbrFilter'); if(_af) _af.addEventListener('input',filterAbbr);
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeAbbr(); });
 </script>
 </body></html>
