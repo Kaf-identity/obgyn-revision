@@ -208,6 +208,69 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 #abbrModal .abrow.hide{display:none}
 #abbrModal .abnote{padding:0 20px 8px;font-size:11.5px;color:var(--muted);font-style:italic}
 @media(max-width:640px){#abbrModal .ablist{grid-template-columns:1fr}}
+/* ===== See also chips ===== */
+.seealso{margin:12px 18px 4px;display:flex;flex-wrap:wrap;gap:7px;align-items:center;border-top:1px dashed var(--line);padding-top:11px}
+.seealso-lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--muted)}
+.seealso-chip{background:var(--accent-bg);border:1px solid var(--line);color:var(--brand2);border-radius:20px;padding:4px 11px;font-size:12px;cursor:pointer;font-weight:500}
+.seealso-chip:hover{border-color:var(--brand);background:#fff}
+.seealso-chip:before{content:"\2197";margin-right:4px;opacity:.6}
+@media(max-width:900px){.seealso{margin-left:0;margin-right:0}}
+.flash-hl{animation:flashhl 1.5s ease}
+@keyframes flashhl{0%,100%{box-shadow:0 1px 2px rgba(40,20,40,.04)}25%{box-shadow:0 0 0 3px var(--brand)}}
+/* ===== topic status / progress ===== */
+.statusbtn{margin-left:auto;flex:0 0 auto;background:#fff;border:1px solid var(--line);color:var(--muted);border-radius:20px;padding:3px 10px;font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+.statusbtn:hover{border-color:var(--brand)}
+.statusbtn.st-done{background:#e9f8ee;border-color:#16a34a;color:#15803d}
+.statusbtn.st-review{background:#fff6e6;border-color:#d99413;color:#b45309}
+.topic.st-done>.topic-title{box-shadow:inset 4px 0 0 #16a34a}
+.topic.st-review>.topic-title{box-shadow:inset 4px 0 0 #f0b323}
+.sec-done{background:rgba(255,255,255,.28);padding:2px 7px;border-radius:12px}
+.prog-card{background:linear-gradient(135deg,#fff,var(--accent-bg));border:1.5px solid var(--brand);border-radius:14px;padding:14px 16px;margin:0 0 16px;display:flex;align-items:center;gap:16px}
+#progRing{flex:0 0 auto;width:58px;height:58px;border-radius:50%;background:conic-gradient(var(--brand) 0%,#ece6ef 0);display:flex;align-items:center;justify-content:center;position:relative}
+#progRing:after{content:"";position:absolute;inset:7px;background:#fff;border-radius:50%}
+#progPct{position:relative;z-index:1;font-size:14px;font-weight:800;color:var(--brand2)}
+.prog-mid{flex:1 1 auto;min-width:0}
+.prog-mid #progMsg{font-size:14px;color:var(--ink)}
+.prog-mid #progSub{font-size:12px;color:var(--muted);margin-top:2px}
+.prog-tools{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.progfilter{display:flex;gap:4px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:3px}
+.progfilter button{background:none;border:none;border-radius:6px;padding:5px 9px;font-size:11.5px;color:var(--muted);cursor:pointer;font-weight:600;white-space:nowrap}
+.progfilter button.active{background:var(--brand);color:#fff}
+#progReset{background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;text-decoration:underline}
+#progMini{margin:8px 14px 2px;font-size:12px;color:#e8d6e6}
+#progMini b{color:#fff}
+@media(max-width:700px){.prog-card{flex-wrap:wrap}.prog-tools{align-items:flex-start;width:100%}}
+/* ===== shared modal (flashcards + numbers) ===== */
+.smodal{display:none;position:fixed;inset:0;z-index:130;align-items:flex-start;justify-content:center}
+.smodal.show{display:flex}
+.smodal .sdrop{position:absolute;inset:0;background:rgba(20,8,22,.55)}
+.smodal .sbox{position:relative;background:var(--panel);width:min(680px,94vw);max-height:88vh;margin-top:5vh;border-radius:16px;box-shadow:0 20px 60px rgba(20,8,22,.45);display:flex;flex-direction:column;overflow:hidden}
+.smodal .shead{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.smodal .shead h3{margin:0;font-size:17px;color:var(--brand2)}
+.smodal .shead .sx{margin-left:auto;background:none;border:1px solid var(--line);border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer;color:var(--muted)}
+.smodal select,.smodal input{padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px}
+/* flashcards */
+#fcBody{padding:18px;overflow-y:auto}
+#fcCard{perspective:0;min-height:280px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(150deg,var(--accent-bg),#fff);padding:20px;cursor:pointer;position:relative}
+#fcCard .fc-sec{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--brand);font-weight:700}
+#fcFront{min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px}
+#fcFront .fc-q{font-size:22px;font-weight:800;color:var(--brand2)}
+#fcFront .fc-hint{font-size:12.5px;color:var(--muted)}
+#fcBack{display:none}
+#fcCard.flipped #fcFront{display:none}
+#fcCard.flipped #fcBack{display:block}
+#fcCard .flip-tag{position:absolute;bottom:10px;right:14px;font-size:11px;color:var(--muted)}
+.fc-bar{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.fc-bar button{background:var(--brand);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:13.5px;font-weight:600;cursor:pointer}
+.fc-bar button.ghost2{background:#fff;color:var(--brand2);border:1px solid var(--line)}
+.fc-bar #fcCount{margin-left:auto;font-size:13px;color:var(--muted);font-weight:600}
+/* numbers */
+#numList{overflow-y:auto;padding:8px 16px 16px}
+.num-g{margin-top:12px}
+.num-h{font-size:13px;font-weight:700;color:#fff;background:var(--brand);border-radius:8px;padding:6px 11px;position:sticky;top:0}
+.num-row{display:flex;gap:12px;padding:6px 6px;border-bottom:1px solid #f0ecf3;font-size:13.3px}
+.num-l{flex:1 1 auto;color:var(--ink)}
+.num-v{flex:0 0 auto;font-weight:700;color:var(--brand2);text-align:right}
 @media(max-width:900px){
  #sidebar{position:fixed;left:0;top:0;z-index:60;transform:translateX(-100%);transition:transform .2s}
  #sidebar.open{transform:translateX(0)}
@@ -232,6 +295,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
  <button id="sb-close" aria-label="Close menu" title="Close menu">&times;</button>
  <div class="brand"><h1>Obstetrics &amp; Gynaecology</h1><div class="sub">All you need to know to ace the exam &middot; JUST curriculum</div></div>
  <div class="countdown">Exam format<br><b>2 papers &middot; 70 MCQs &middot; 90 min</b><br>35 Obstetrics + 35 Gynaecology</div>
+ <div id="progMini">0/44 topics done</div>
  <button class="navtool primary" onclick="document.getElementById('mock-section').scrollIntoView()">Take a Mock Exam (A / B)</button>
  <div class="navsec">Part 1 &middot; Obstetrics</div>
  <ul class="obs-nav"><li><a href="#sys-anc" class="navlink" data-target="sys-anc">1. Antenatal Care &amp; Fetal Assessment</a></li>
@@ -249,7 +313,9 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 <li><a href="#sys-onc" class="navlink" data-target="sys-onc">6. Gynaecologic Oncology &amp; Surgery</a></li></ul>
  <div class="navsec">Exam</div>
  <ul><li><a href="#mock-section" class="navlink" data-target="mock-section">Mock Exams (A &amp; B)</a></li></ul>
- <div class="navsec">Tools</div>
+ <div class="navsec">Study tools</div>
+ <button class="navtool" id="openFC">&#127183; Flashcards (active recall)</button>
+ <button class="navtool" id="openNum">&#128290; Numbers &amp; cut-offs</button>
  <button class="navtool" id="openAbbr">&#128214; Abbreviations (A&ndash;Z)</button>
  <button class="navtool" id="expandAll">Expand all topics</button>
  <button class="navtool" id="collapseAll">Collapse all topics</button>
@@ -277,11 +343,28 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
      <div class="intro-actions">
        <button class="cta" onclick="document.getElementById('mock-section').scrollIntoView()">&#9654; Start a Mock Exam</button>
        <button class="ghost" onclick="var s=document.getElementById('search');s.scrollIntoView();s.focus()">&#128269; Search topics</button>
+       <button class="ghost" id="openFC2">&#127183; Flashcards</button>
+       <button class="ghost" id="openNum2">&#128290; Numbers &amp; cut-offs</button>
        <button class="ghost" id="openAbbr2">&#128214; Abbreviations</button>
      </div>
      <details class="howto"><summary>How to use it &#9662;</summary>
        <p>Everything starts collapsed as folders &mdash; tap a coloured section (rose = Obstetrics, plum = Gynaecology) to open it, then tap any topic inside. Skim the definition, the comparison table and the amber MCQ pearls, then do the 5 questions at the end of each section. Finish with the two 90-minute mock papers (A &amp; B), each 35 Obstetrics + 35 Gynaecology.</p></details>
      <div class="disc">Disclaimer: all content is compiled from the official study sheets of the Jordan University of Science and Technology (JUST) curriculum &mdash; for revision only.</div>
+   </div>
+   <div class="prog-card">
+     <div id="progRing"><span id="progPct">0%</span></div>
+     <div class="prog-mid">
+       <div id="progMsg"></div>
+       <div id="progSub"></div>
+     </div>
+     <div class="prog-tools">
+       <div class="progfilter">
+         <button data-f="all" class="active">All</button>
+         <button data-f="left">What&rsquo;s left</button>
+         <button data-f="review">&starf; Review</button>
+       </div>
+       <button id="progReset">Reset progress</button>
+     </div>
    </div>
 <div class="part-banner" id="part-obs"><span class="part-kicker">Part 1 &middot; Session A</span><h2>Obstetrics</h2><p>Pregnancy, labour and the puerperium &mdash; maternal-fetal medicine.</p></div>
 <section class="system" id="sys-anc" data-system="Antenatal Care &amp; Fetal Assessment">
@@ -289,7 +372,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 <p class="sys-intro">booking, physiology, screening, CTG interpretation and prescribing in pregnancy</p>
 
   <!-- ═══════════════════════════════════════════════════════ TOPIC 1 -->
-  <article class="topic">
+  <article class="topic" id="sys-anc-t1">
     <h3 class="topic-title">Obstetric History &amp; Examination</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -322,7 +405,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════════════ TOPIC 2 -->
-  <article class="topic">
+  <article class="topic" id="sys-anc-t2">
     <h3 class="topic-title">Physiological Changes in Pregnancy</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -358,7 +441,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════════════ TOPIC 3 -->
-  <article class="topic">
+  <article class="topic" id="sys-anc-t3">
     <h3 class="topic-title">Antenatal Care &amp; Screening</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -396,7 +479,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════════════ TOPIC 4 -->
-  <article class="topic">
+  <article class="topic" id="sys-anc-t4">
     <h3 class="topic-title">CTG &amp; Partogram</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -431,7 +514,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════════════ TOPIC 5 -->
-  <article class="topic">
+  <article class="topic" id="sys-anc-t5">
     <h3 class="topic-title">Drugs in Pregnancy</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -555,7 +638,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 <p class="sys-intro">bleeding and pain in the first trimester — when it is benign and when it is dangerous</p>
 
   <!-- ═══════════════════════════════════════════════════ TOPIC 1 -->
-  <article class="topic">
+  <article class="topic" id="sys-earlypreg-t1">
     <h3 class="topic-title">Miscarriage (Types &amp; Management)</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -643,7 +726,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════════ TOPIC 2 -->
-  <article class="topic">
+  <article class="topic" id="sys-earlypreg-t2">
     <h3 class="topic-title">Ectopic Pregnancy</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -705,7 +788,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════════ TOPIC 3 -->
-  <article class="topic">
+  <article class="topic" id="sys-earlypreg-t3">
     <h3 class="topic-title">Molar Pregnancy / GTD</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -782,7 +865,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════════ TOPIC 4 -->
-  <article class="topic">
+  <article class="topic" id="sys-earlypreg-t4">
     <h3 class="topic-title">Thrombophilia &amp; Recurrent Miscarriage</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -916,7 +999,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════
        TOPIC 1 — Normal Labour (Stages & Mechanism)
   ═══════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-labour-t1">
     <h3 class="topic-title">Normal Labour — Stages &amp; Mechanism</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -951,7 +1034,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════
        TOPIC 2 — Abnormal Labour / Failure to Progress
   ═══════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-labour-t2">
     <h3 class="topic-title">Abnormal Labour / Failure to Progress</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -988,7 +1071,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════
        TOPIC 3 — Malpresentation & Malposition
   ═══════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-labour-t3">
     <h3 class="topic-title">Malpresentation &amp; Malposition</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -1027,7 +1110,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════
        TOPIC 4 — Induction of Labour & Prolonged Pregnancy
   ═══════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-labour-t4">
     <h3 class="topic-title">Induction of Labour &amp; Prolonged Pregnancy</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -1065,7 +1148,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════
        TOPIC 5 — Operative Vaginal Delivery & Caesarean
   ═══════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-labour-t5">
     <h3 class="topic-title">Operative Vaginal Delivery &amp; Caesarean Section</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -1100,7 +1183,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════
        TOPIC 6 — Preterm Labour & PROM
   ═══════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-labour-t6">
     <h3 class="topic-title">Preterm Labour &amp; PROM</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -1215,7 +1298,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 <p class="sys-intro">pre-existing and pregnancy-induced medical disease and how it changes management</p>
 
   <!-- ═══════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-medical-t1">
     <h3 class="topic-title">Hypertensive Disorders / Pre-eclampsia &amp; Eclampsia</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -1255,7 +1338,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-medical-t2">
     <h3 class="topic-title">Diabetes in Pregnancy (GDM &amp; Pre-existing)</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -1297,7 +1380,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-medical-t3">
     <h3 class="topic-title">Anaemia in Pregnancy</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -1334,7 +1417,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-medical-t4">
     <h3 class="topic-title">VTE in Pregnancy</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -1372,7 +1455,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-medical-t5">
     <h3 class="topic-title">Other Medical Disorders (Thyroid, Cardiac, Renal, Autoimmune)</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -1488,7 +1571,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════════════
        TOPIC 1 — ANTEPARTUM HAEMORRHAGE
   ═══════════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-bleeding-t1">
     <h3 class="topic-title">Antepartum Haemorrhage (APH)</h3>
 
     <div class="box def">
@@ -1586,7 +1669,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════════════
        TOPIC 2 — POSTPARTUM HAEMORRHAGE
   ═══════════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-bleeding-t2">
     <h3 class="topic-title">Postpartum Haemorrhage (PPH)</h3>
 
     <div class="box def">
@@ -1654,7 +1737,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════════════
        TOPIC 3 — THE PUERPERIUM
   ═══════════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-bleeding-t3">
     <h3 class="topic-title">The Puerperium — Normal &amp; Complications</h3>
 
     <div class="box def">
@@ -1808,7 +1891,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 <p class="sys-intro">the fetus — growth, anomalies, isoimmunisation, and twins</p>
 
   <!-- ═══════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-fetal-t1">
     <h3 class="topic-title">Rh Isoimmunisation</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -1849,7 +1932,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-fetal-t2">
     <h3 class="topic-title">Fetal Growth — IUGR/SGA &amp; Macrosomia</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -1883,7 +1966,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-fetal-t3">
     <h3 class="topic-title">Multiple Gestation</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -1925,7 +2008,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-fetal-t4">
     <h3 class="topic-title">Fetal Anomalies &amp; Screening</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -1960,7 +2043,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-fetal-t5">
     <h3 class="topic-title">Miscellaneous — High-Yield Items</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -2072,7 +2155,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 <p class="sys-intro">the normal cycle and the common disorders of menstruation</p>
 
   <!-- ═══════════════════════════════ TOPIC 1 ═══════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-menstrual-t1">
     <h3 class="topic-title">The Menstrual Cycle (Physiology)</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -2113,7 +2196,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════ TOPIC 2 ═══════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-menstrual-t2">
     <h3 class="topic-title">Menorrhagia / Abnormal Uterine Bleeding (PALM-COEIN)</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -2159,7 +2242,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════ TOPIC 3 ═══════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-menstrual-t3">
     <h3 class="topic-title">Amenorrhoea (Primary vs Secondary)</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -2333,7 +2416,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 <p class="sys-intro">fibroids, endometriosis and lower genital tract infection</p>
 
   <!-- ═══════════════════════════════════════════════════ TOPIC 1 -->
-  <article class="topic">
+  <article class="topic" id="sys-benign-t1">
     <h3 class="topic-title">Uterine Fibroids</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -2372,7 +2455,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════════ TOPIC 2 -->
-  <article class="topic">
+  <article class="topic" id="sys-benign-t2">
     <h3 class="topic-title">Endometriosis &amp; Adenomyosis</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -2412,7 +2495,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- ═══════════════════════════════════════════════════ TOPIC 3 -->
-  <article class="topic">
+  <article class="topic" id="sys-benign-t3">
     <h3 class="topic-title">Vaginal Discharge &amp; Pelvic Inflammatory Disease</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -2531,7 +2614,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 <p class="sys-intro">preventing and achieving pregnancy</p>
 
   <!-- ═══════════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-fertility-t1">
     <h3 class="topic-title">Contraception</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -2630,7 +2713,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 </article>
 
   <!-- ═══════════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-fertility-t2">
     <h3 class="topic-title">Infertility</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -2783,7 +2866,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 <h2 class="sys-title">4. Menopause &amp; HRT</h2>
 <p class="sys-intro">the menopausal transition and hormone replacement therapy</p>
 
-  <article class="topic">
+  <article class="topic" id="sys-menopause-t1">
     <h3 class="topic-title">Menopause</h3>
 
     <div class="box def"><span class="lbl">Definition</span> Permanent cessation of menstruation due to loss of ovarian follicular activity, diagnosed retrospectively after <b>12 consecutive months of amenorrhea</b> without other cause; average age <b>51</b> (normal range 45–55); pathological if &lt;40 y.</div>
@@ -2817,7 +2900,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
     <div class="mnem"><b>Mnemonic:</b> Menopausal symptoms &mdash; &ldquo;<b>VAMPS</b>&rdquo;: <b>V</b>asomotor (hot flushes, night sweats &mdash; hypothalamic instability from E deficiency), <b>A</b>trophy &mdash; urogenital (vaginal dryness, dyspareunia, recurrent UTIs), <b>M</b>ood &amp; cognition (depression, anxiety, poor memory), <b>P</b>sychological &amp; sleep (insomnia, low libido), <b>S</b>keletal &amp; skin (osteoporosis, joint pain, collagen loss, wrinkling).</div>
 </article>
 
-  <article class="topic">
+  <article class="topic" id="sys-menopause-t2">
     <h3 class="topic-title">Hormone Replacement Therapy (HRT)</h3>
 
     <div class="box def"><span class="lbl">Definition</span> Exogenous estrogen ± progestogen to relieve menopausal symptoms; <b>only 20–30%</b> of menopausal women need HRT — the majority remain healthy with lifestyle measures alone.</div>
@@ -2927,7 +3010,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 <p class="sys-intro">pelvic floor dysfunction — leaking and descent</p>
 
   <!-- TOPIC 1 -->
-  <article class="topic">
+  <article class="topic" id="sys-urogyn-t1">
     <h3 class="topic-title">Urinary Incontinence</h3>
 
     <div class="box def"><span class="lbl">Definition</span> Involuntary loss of urine; classified as <b>stress (SUI)</b>, <b>urgency/OAB (UUI)</b>, <b>overflow</b>, mixed, or functional.</div>
@@ -2964,7 +3047,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </article>
 
   <!-- TOPIC 2 -->
-  <article class="topic">
+  <article class="topic" id="sys-urogyn-t2">
     <h3 class="topic-title">Pelvic Organ Prolapse (POP)</h3>
 
     <div class="box def"><span class="lbl">Definition</span> Downward descent of the uterus and/or vagina towards or through the introitus; bladder, urethra, and rectum may be secondarily involved.</div>
@@ -3078,7 +3161,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════
        TOPIC 1 — Cervical Cancer &amp; Screening
   ════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-onc-t1">
     <h3 class="topic-title">Cervical Cancer &amp; Screening</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -3123,7 +3206,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════
        TOPIC 2 — Endometrial Cancer
   ════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-onc-t2">
     <h3 class="topic-title">Endometrial Cancer</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -3166,7 +3249,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════
        TOPIC 3 — Ovarian Cancer
   ════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-onc-t3">
     <h3 class="topic-title">Ovarian Cancer</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -3210,7 +3293,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════
        TOPIC 4 — Gynaecological Surgeries
   ════════════════════════════════════════════════ -->
-  <article class="topic">
+  <article class="topic" id="sys-onc-t4">
     <h3 class="topic-title">Gynaecological Surgeries</h3>
 
     <div class="box def"><span class="lbl">Definition</span>
@@ -3355,6 +3438,42 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
     </div>
     <div class="abnote">Hover any underlined abbreviation in the text to see this instantly. Tap one on mobile.</div>
     <div class="ablist" id="abbrList"></div>
+  </div>
+</div>
+<div id="fcModal" class="smodal no-abbr" role="dialog" aria-label="Flashcards">
+  <div class="sdrop" id="fcDrop"></div>
+  <div class="sbox">
+    <div class="shead">
+      <h3>&#127183; Flashcards</h3>
+      <select id="fcScope"><option value="all">All sections</option></select>
+      <button class="sx" id="fcClose" aria-label="Close">&times;</button>
+    </div>
+    <div id="fcBody">
+      <div id="fcCard">
+        <div class="fc-sec" id="fcSec"></div>
+        <div id="fcFront"></div>
+        <div id="fcBack"></div>
+        <div class="flip-tag">tap / Space to flip</div>
+      </div>
+      <div class="fc-bar">
+        <button class="ghost2" id="fcPrev">&larr; Prev</button>
+        <button id="fcFlipBtn">Flip</button>
+        <button class="ghost2" id="fcNext">Next &rarr;</button>
+        <button class="ghost2" id="fcShuffle">&#128256; Shuffle</button>
+        <span id="fcCount"></span>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="numModal" class="smodal no-abbr" role="dialog" aria-label="Numbers and cut-offs">
+  <div class="sdrop" id="numDrop"></div>
+  <div class="sbox">
+    <div class="shead">
+      <h3>&#128290; Numbers &amp; cut-offs</h3>
+      <input id="numFilter" placeholder="Filter (e.g. anti-D, Bishop, CA-125)…">
+      <button class="sx" id="numClose" aria-label="Close">&times;</button>
+    </div>
+    <div id="numList"></div>
   </div>
 </div>
 <script>
@@ -3624,5 +3743,138 @@ var _ax=document.getElementById('abbrClose'); if(_ax) _ax.onclick=closeAbbr;
 var _abd=document.getElementById('abbrDrop'); if(_abd) _abd.onclick=closeAbbr;
 var _af=document.getElementById('abbrFilter'); if(_af) _af.addEventListener('input',filterAbbr);
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeAbbr(); });
+// ============ STUDY FEATURES: links · progress · flashcards · numbers ============
+var TOPICS=[].slice.call(document.querySelectorAll('.topic'));
+var TLABEL={};
+TOPICS.forEach(function(t){ var h=t.querySelector('.topic-title'); TLABEL[t.id]=h?h.textContent.trim():t.id; });
+function secName(sec){ return sec?(sec.getAttribute('data-system')||'').trim():''; }
+function openTopic(tid){
+  var t=document.getElementById(tid); if(!t) return;
+  var sec=t.closest('.system'); if(sec){ sec.classList.remove('sec-collapsed'); sec.style.display=''; }
+  t.classList.remove('collapsed','hiddenbysearch'); t.style.display='';
+  setTimeout(function(){ t.scrollIntoView({behavior:'smooth',block:'start'}); },60);
+  t.classList.add('flash-hl'); setTimeout(function(){ t.classList.remove('flash-hl'); },1600);
+}
+// ---- See also chips ----
+var SEE_ALSO={"sys-anc-t1": ["sys-anc-t3", "sys-anc-t4"], "sys-anc-t2": ["sys-medical-t3", "sys-medical-t4", "sys-anc-t3"], "sys-anc-t3": ["sys-fetal-t4", "sys-fetal-t1", "sys-medical-t2"], "sys-anc-t4": ["sys-labour-t1", "sys-labour-t2", "sys-fetal-t2"], "sys-anc-t5": ["sys-medical-t1", "sys-medical-t4", "sys-medical-t5"], "sys-earlypreg-t1": ["sys-earlypreg-t4", "sys-earlypreg-t2", "sys-earlypreg-t3"], "sys-earlypreg-t2": ["sys-earlypreg-t1", "sys-benign-t3", "sys-anc-t3"], "sys-earlypreg-t3": ["sys-earlypreg-t1", "sys-earlypreg-t2", "sys-onc-t3"], "sys-earlypreg-t4": ["sys-earlypreg-t1", "sys-medical-t4", "sys-medical-t5"], "sys-labour-t1": ["sys-labour-t2", "sys-anc-t4", "sys-labour-t3"], "sys-labour-t2": ["sys-labour-t3", "sys-labour-t5", "sys-anc-t4"], "sys-labour-t3": ["sys-labour-t2", "sys-labour-t5", "sys-fetal-t3"], "sys-labour-t4": ["sys-labour-t1", "sys-labour-t6", "sys-bleeding-t2"], "sys-labour-t5": ["sys-labour-t2", "sys-labour-t3", "sys-bleeding-t2"], "sys-labour-t6": ["sys-labour-t4", "sys-anc-t5", "sys-bleeding-t1"], "sys-medical-t1": ["sys-bleeding-t1", "sys-anc-t5", "sys-fetal-t2"], "sys-medical-t2": ["sys-fetal-t2", "sys-anc-t3", "sys-labour-t5"], "sys-medical-t3": ["sys-anc-t2", "sys-bleeding-t2", "sys-fetal-t1"], "sys-medical-t4": ["sys-anc-t2", "sys-earlypreg-t4", "sys-anc-t5"], "sys-medical-t5": ["sys-anc-t5", "sys-earlypreg-t4", "sys-medical-t1"], "sys-bleeding-t1": ["sys-bleeding-t2", "sys-medical-t1", "sys-fetal-t1"], "sys-bleeding-t2": ["sys-bleeding-t1", "sys-medical-t3", "sys-labour-t5"], "sys-bleeding-t3": ["sys-bleeding-t2", "sys-medical-t4", "sys-fertility-t1"], "sys-fetal-t1": ["sys-anc-t3", "sys-bleeding-t1", "sys-fetal-t4"], "sys-fetal-t2": ["sys-anc-t4", "sys-medical-t1", "sys-medical-t2"], "sys-fetal-t3": ["sys-labour-t3", "sys-bleeding-t2", "sys-fetal-t2"], "sys-fetal-t4": ["sys-anc-t3", "sys-anc-t5", "sys-fetal-t1"], "sys-fetal-t5": ["sys-anc-t3", "sys-fetal-t4"], "sys-menstrual-t1": ["sys-menstrual-t3", "sys-fertility-t2", "sys-menstrual-t2"], "sys-menstrual-t2": ["sys-benign-t1", "sys-onc-t2", "sys-benign-t2"], "sys-menstrual-t3": ["sys-menstrual-t1", "sys-fertility-t2", "sys-menopause-t1"], "sys-benign-t1": ["sys-menstrual-t2", "sys-fertility-t2", "sys-onc-t4"], "sys-benign-t2": ["sys-menstrual-t2", "sys-fertility-t2", "sys-benign-t3"], "sys-benign-t3": ["sys-earlypreg-t2", "sys-fertility-t2", "sys-onc-t1"], "sys-fertility-t1": ["sys-menstrual-t2", "sys-bleeding-t3", "sys-fertility-t2"], "sys-fertility-t2": ["sys-menstrual-t3", "sys-benign-t2", "sys-benign-t1"], "sys-menopause-t1": ["sys-menopause-t2", "sys-menstrual-t3", "sys-urogyn-t1"], "sys-menopause-t2": ["sys-menopause-t1", "sys-onc-t2", "sys-urogyn-t1"], "sys-urogyn-t1": ["sys-urogyn-t2", "sys-menopause-t1", "sys-onc-t4"], "sys-urogyn-t2": ["sys-urogyn-t1", "sys-onc-t4", "sys-menopause-t1"], "sys-onc-t1": ["sys-benign-t3", "sys-onc-t4", "sys-onc-t2"], "sys-onc-t2": ["sys-menstrual-t2", "sys-menopause-t2", "sys-onc-t3"], "sys-onc-t3": ["sys-onc-t2", "sys-onc-t4", "sys-benign-t1"], "sys-onc-t4": ["sys-onc-t1", "sys-onc-t2", "sys-urogyn-t2"]};
+TOPICS.forEach(function(t){
+  var rel=SEE_ALSO[t.id]; if(!rel||!rel.length) return;
+  var body=t.querySelector('.topic-body'); if(!body) return;
+  var wrap=document.createElement('div'); wrap.className='seealso';
+  wrap.innerHTML='<span class="seealso-lbl">See also</span>';
+  rel.forEach(function(rid){
+    if(!TLABEL[rid]) return;
+    var c=document.createElement('button'); c.type='button'; c.className='seealso-chip'; c.textContent=TLABEL[rid];
+    c.addEventListener('click',function(e){ e.stopPropagation(); openTopic(rid); });
+    wrap.appendChild(c);
+  });
+  body.appendChild(wrap);
+});
+// ---- Progress tracker ----
+var PKEY='obgyn_progress_v1', prog={};
+try{ prog=JSON.parse(localStorage.getItem(PKEY)||'{}')||{}; }catch(e){ prog={}; }
+function saveProg(){ try{ localStorage.setItem(PKEY,JSON.stringify(prog)); }catch(e){} }
+var STT={done:{t:'✓ Got it',c:'st-done'}, review:{t:'★ Review',c:'st-review'}};
+function nextStatus(s){ return s==null?'done':(s==='done'?'review':null); }
+function applyStatus(t){
+  var s=prog[t.id]||null; t.classList.remove('st-done','st-review');
+  if(s) t.classList.add(STT[s].c);
+  var b=t.querySelector('.statusbtn'); if(b){ b.textContent=s?STT[s].t:'○ Mark'; b.className='statusbtn'+(s?(' '+STT[s].c):''); }
+}
+TOPICS.forEach(function(t){
+  var h=t.querySelector('.topic-title'); if(!h) return;
+  var b=document.createElement('button'); b.type='button'; b.className='statusbtn'; b.textContent='○ Mark';
+  b.title='Mark your confidence';
+  b.addEventListener('click',function(e){ e.stopPropagation(); var ns=nextStatus(prog[t.id]||null); if(ns) prog[t.id]=ns; else delete prog[t.id]; saveProg(); applyStatus(t); updateProgress(); });
+  h.appendChild(b); applyStatus(t);
+});
+function updateProgress(){
+  var done=0,review=0,total=TOPICS.length;
+  TOPICS.forEach(function(t){ var s=prog[t.id]; if(s==='done')done++; else if(s==='review')review++; });
+  var left=total-done, pct=Math.round(done/total*100);
+  var ring=document.getElementById('progRing'); if(ring) ring.style.background='conic-gradient(var(--brand) '+pct+'%, #ece6ef 0)';
+  var pp=document.getElementById('progPct'); if(pp) pp.textContent=pct+'%';
+  var msg=document.getElementById('progMsg');
+  if(msg){
+    var m;
+    if(done===0) m="Tap <b>○ Mark</b> on a topic as you finish it. Goal: clear all "+total+".";
+    else if(done===total) m="All "+total+" done — you’re exam-ready. Now sweep your ★ Review pile.";
+    else { m=done+" of "+total+" locked in &middot; <b>"+left+" to go</b> — keep pushing!";
+      if(pct>=50&&pct<75) m=done+" of "+total+" &middot; past halfway &middot; <b>"+left+" to go</b> — momentum!";
+      else if(pct>=75) m=done+" of "+total+" &middot; almost home &middot; <b>just "+left+" to go</b>!"; }
+    msg.innerHTML=m;
+  }
+  var sub=document.getElementById('progSub'); if(sub) sub.innerHTML=review?('<b>'+review+'</b> marked ★ for review'):'';
+  var sm=document.getElementById('progMini'); if(sm) sm.innerHTML='<b>'+done+'</b>/'+total+' topics done';
+  document.querySelectorAll('.system').forEach(function(sec){
+    var ts=[].slice.call(sec.querySelectorAll('.topic'));
+    var d=ts.filter(function(t){return prog[t.id]==='done';}).length;
+    var badge=sec.querySelector('.sec-count'); if(!badge) return;
+    var base=badge.getAttribute('data-base'); if(base==null){ base=badge.textContent; badge.setAttribute('data-base',base); }
+    badge.innerHTML=base+(d?(' &middot; <span class="sec-done">✓'+d+'/'+ts.length+'</span>'):'');
+  });
+}
+var fMode='all';
+function applyFilter(){
+  TOPICS.forEach(function(t){ var s=prog[t.id]||null,show=true;
+    if(fMode==='left') show=(s!=='done'); else if(fMode==='review') show=(s==='review');
+    t.style.display=show?'':'none'; });
+  document.querySelectorAll('.system').forEach(function(sec){
+    var any=[].slice.call(sec.querySelectorAll('.topic')).some(function(t){return t.style.display!=='none';});
+    sec.style.display=any?'':'none'; if(fMode!=='all'&&any) sec.classList.remove('sec-collapsed');
+  });
+}
+function setFilter(m){ fMode=m; document.querySelectorAll('.progfilter button').forEach(function(b){ b.classList.toggle('active',b.getAttribute('data-f')===m); }); applyFilter(); }
+document.querySelectorAll('.progfilter button').forEach(function(b){ b.addEventListener('click',function(){ setFilter(b.getAttribute('data-f')); }); });
+var pr=document.getElementById('progReset'); if(pr) pr.onclick=function(){ if(confirm('Reset all your progress marks?')){ prog={}; saveProg(); TOPICS.forEach(applyStatus); updateProgress(); setFilter('all'); } };
+updateProgress();
+// ---- Flashcards ----
+var fcCards=[],fcIdx=0,fcFlipped=false,fcScope='all';
+function buildDeck(){
+  fcCards=TOPICS.filter(function(t){ if(fcScope==='all')return true; var s=t.closest('.system'); return s&&s.id===fcScope; }).map(function(t){
+    var sec=t.closest('.system'); var parts='';
+    t.querySelectorAll('.box.def,table.cmp,.box.buzz,.box.flag,.mnem').forEach(function(el){ parts+=el.outerHTML; });
+    return {front:TLABEL[t.id], sec:secName(sec), back:parts};
+  });
+  for(var i=fcCards.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=fcCards[i];fcCards[i]=fcCards[j];fcCards[j]=tmp;}
+  fcIdx=0; fcFlipped=false;
+}
+function renderCard(){
+  var c=fcCards[fcIdx]; if(!c) return;
+  document.getElementById('fcCount').textContent=(fcIdx+1)+' / '+fcCards.length;
+  document.getElementById('fcSec').textContent=c.sec;
+  document.getElementById('fcFront').innerHTML='<div class="fc-q">'+c.front+'</div><div class="fc-hint">Recall the definition, table, pearls &amp; mnemonic — then flip.</div>';
+  document.getElementById('fcBack').innerHTML=c.back;
+  document.getElementById('fcCard').classList.toggle('flipped',fcFlipped);
+}
+function fcFlip(){ fcFlipped=!fcFlipped; document.getElementById('fcCard').classList.toggle('flipped',fcFlipped); }
+function fcGo(d){ if(!fcCards.length)return; fcIdx=(fcIdx+d+fcCards.length)%fcCards.length; fcFlipped=false; renderCard(); }
+function openFC(){ buildDeck(); renderCard(); document.getElementById('fcModal').classList.add('show'); }
+function closeFC(){ document.getElementById('fcModal').classList.remove('show'); }
+(function(){ var sel=document.getElementById('fcScope'); if(!sel)return;
+  document.querySelectorAll('.system').forEach(function(sec){ var o=document.createElement('option'); o.value=sec.id; o.textContent=secName(sec); sel.appendChild(o); }); })();
+// ---- Numbers cribsheet ----
+var NUMBERS={"groups": [{"topic": "Obstetric History & Examination", "items": [{"label": "Age of viability (Para definition)", "value": "24 wks"}, {"label": "Normal fetal heart rate", "value": "110–160 bpm"}, {"label": "Vertex OA suboccipitobregmatic diameter", "value": "9.5 cm"}, {"label": "Brow supraoccipitomental diameter (largest)", "value": "13.5 cm"}, {"label": "Doppler FHR detection", "value": "10–14 wks"}, {"label": "Fundal height accuracy (after 20 wks)", "value": "GA ± 2 cm"}]}, {"topic": "Physiological Changes in Pregnancy", "items": [{"label": "Cardiac output increase", "value": "↑30–50%"}, {"label": "Plasma volume increase", "value": "↑50%"}, {"label": "GFR increase", "value": "↑50%"}, {"label": "Minute ventilation increase", "value": "↑40%"}]}, {"topic": "Antenatal Care & Screening", "items": [{"label": "Booking visit", "value": "10 wks"}, {"label": "Combined 1st-trimester screen (NT + β-hCG + PAPP-A)", "value": "11–13+6 wks"}, {"label": "Fetal anomaly scan", "value": "18+0–20+6 wks"}, {"label": "GDM screen (GTT)", "value": "24–28 wks"}, {"label": "Anti-D prophylaxis (Rh-negative)", "value": "28 & 34 wks"}, {"label": "GBS vaginal swab", "value": "35–37 wks"}, {"label": "Post-dates IOL timing", "value": "41+3 wks"}, {"label": "Quickening — primigravida / multigravida", "value": "18–20 wks / 16–20 wks"}, {"label": "US dating — 1st trimester CRL accuracy", "value": "±5 days"}]}, {"topic": "CTG & Partogram", "items": [{"label": "Normal baseline variability", "value": "5–25 bpm"}, {"label": "Acceleration definition", "value": "≥15 bpm for ≥15 sec"}, {"label": "Variable deceleration — nadir", "value": "<30 sec (abrupt)"}, {"label": "Late deceleration — nadir", "value": ">30 sec (gradual)"}, {"label": "FBS — normal pH", "value": "≥7.25"}, {"label": "FBS — borderline pH", "value": "7.21–7.24 (repeat in 30 min)"}, {"label": "FBS — deliver", "value": "pH <7.2"}, {"label": "Partogram action line", "value": "4 hours right of alert line"}, {"label": "Effective contraction", "value": "3/10 min, 1 min, 50 mmHg"}, {"label": "Tachysystole", "value": ">5 contractions/10 min"}]}, {"topic": "Drugs in Pregnancy", "items": [{"label": "Teratogenic window (organogenesis)", "value": "~5–10 wks LMP (20–55 days post-fertilisation)"}, {"label": "NSAID risk from", "value": ">20 wks (oligohydramnios, ductus closure)"}, {"label": "Indomethacin tocolysis — use only", "value": "<30 wks, max 72 h"}, {"label": "PTU preferred", "value": "1st trimester"}, {"label": "Methimazole preferred", "value": "2nd–3rd trimester"}, {"label": "Folic acid standard dose", "value": "400 mcg/day"}, {"label": "Folic acid high-risk dose (DM, SCA, epileptics)", "value": "5 mg/day"}]}, {"topic": "Miscarriage & Ectopic Pregnancy", "items": [{"label": "Recurrent miscarriage definition", "value": "≥3 consecutive losses"}, {"label": "Blighted ovum — sac diagnosis (TV-US ×2 ≥7 d apart)", "value": "gestational sac >20 mm, no yolk sac/pole"}, {"label": "Missed miscarriage — CRL threshold", "value": "CRL >6 mm, no cardiac activity on 2 scans ≥7 days apart"}, {"label": "Anti-D NOT required — threatened/complete abortion", "value": "<12 wks"}, {"label": "MC cause 1st-trimester loss", "value": "chromosomal (50–70%)"}, {"label": "Ectopic — MC site (ampulla)", "value": "80%"}, {"label": "MTX criteria — β-hCG", "value": "<5000 mIU/mL"}, {"label": "MTX criteria — sac", "value": "≤4 cm, no cardiac activity"}, {"label": "MTX success — β-hCG fall", "value": "≥15% day 4 → day 7"}, {"label": "Progesterone — non-viable pregnancy", "value": "<5 ng/mL"}, {"label": "Progesterone — viable IUP", "value": ">25 ng/mL"}, {"label": "Discriminatory zone (TV-US)", "value": "β-hCG ≥1000–1500 mIU/mL"}]}, {"topic": "Molar Pregnancy / GTD", "items": [{"label": "Complete HM karyotype", "value": "46XX (androgenic)"}, {"label": "Partial HM karyotype", "value": "69XXY (triploid)"}, {"label": "Complete HM — malignant risk", "value": "15–20%"}, {"label": "Partial HM — malignant risk", "value": "0.5–1%"}, {"label": "FIGO low risk → single agent (MTX-FA)", "value": "score ≤6"}, {"label": "FIGO high risk → combination (EMA-CO)", "value": "score ≥7"}, {"label": "Choriocarcinoma lung mets", "value": "80%"}]}, {"topic": "Thrombophilia & VTE", "items": [{"label": "APS — aspirin", "value": "75 mg/day"}, {"label": "APS — LMWH (enoxaparin)", "value": "40 mg SC daily to 6 wks postpartum"}, {"label": "LMWH — stop before epidural (prophylactic / therapeutic)", "value": "≥12 h / ≥24 h"}, {"label": "DVT in pregnancy — left-sided", "value": "90%"}, {"label": "Untreated DVT → PE risk; PE fatality rate", "value": "20% / 15%"}, {"label": "Warfarin embryopathy window", "value": "6–12 weeks"}, {"label": "LMWH after delivery — vaginal / CS", "value": "4–6 h / 6–12 h"}]}, {"topic": "Normal Labour", "items": [{"label": "1st stage latent — nullipara / multipara limit", "value": "≤20 h / ≤14 h"}, {"label": "Active dilatation — nullipara / multipara", "value": "≥1 cm/hr / ≥1.5 cm/hr"}, {"label": "2nd stage expulsive — nullipara (no epi / with epi)", "value": "<2 h / <3 h"}, {"label": "3rd stage active management; blood loss", "value": "5–30 min; 150–250 mL"}, {"label": "Bishop score — favourable", "value": "≥7"}]}, {"topic": "IOL, Abnormal Labour & Operative Delivery", "items": [{"label": "Obstetric conjugate (contracted inlet)", "value": "<10 cm"}, {"label": "Oxytocin starting dose", "value": "2 mU/min"}, {"label": "Oxytocin maximum (multipara)", "value": "32 mU/min"}, {"label": "Misoprostol (PGE1) IOL dose", "value": "25 µg vaginally"}, {"label": "PGE2 vaginal pessary / intracervical gel doses", "value": "3 mg / 0.5 mg"}, {"label": "ECV timing", "value": "≥37 wks"}, {"label": "VBAC — uterine rupture risk", "value": "0.5%"}, {"label": "Forceps failure rate", "value": "7%"}, {"label": "Vacuum failure rate", "value": "12%"}, {"label": "Vacuum contraindicated — preterm", "value": "<34 wks"}, {"label": "Epidural contraindicated — platelets", "value": "<80,000"}]}, {"topic": "Preterm Labour & PROM", "items": [{"label": "TVS cervical length — PTL unlikely", "value": ">15 mm"}, {"label": "TVS cervical length — treat as PTL", "value": "<15 mm"}, {"label": "fFN positive threshold", "value": ">50 ng/mL (20–36 wks)"}, {"label": "MgSO4 neuroprotection — window", "value": "24–29+6 wks"}, {"label": "Betamethasone — doses & window", "value": "12 mg IM q24h × 2 doses; 24–34+6 wks"}, {"label": "Betamethasone — max benefit after 2nd dose", "value": "24 h–7 days"}, {"label": "Erythromycin (PPROM)", "value": "250 mg QID × 10 days"}, {"label": "PPROM — planned delivery", "value": "36–37 wks"}, {"label": "US-indicated cerclage", "value": "CL <25 mm + <24 wks + <3 prior losses"}, {"label": "Chorioamnionitis — maternal pyrexia threshold", "value": ">38°C"}]}, {"topic": "Pre-eclampsia & HELLP", "items": [{"label": "PE — BP threshold", "value": "SBP ≥140 or DBP ≥90 after 20 wks"}, {"label": "PE — proteinuria threshold", "value": "≥0.3 g/24 h"}, {"label": "Severe PE — BP", "value": "SBP ≥160 or DBP ≥110"}, {"label": "Severe PE — oliguria", "value": "≤500 mL/24 h"}, {"label": "HELLP — AST", "value": ">72 U/L"}, {"label": "HELLP — LDH", "value": ">600"}, {"label": "HELLP — platelets", "value": "<100,000"}, {"label": "HELLP — transfuse if platelets", "value": "<20,000 (or <50,000 for CS)"}, {"label": "MgSO4 — IV loading dose", "value": "4 g bolus"}, {"label": "MgSO4 — maintenance", "value": "1 g/h for 24 h"}, {"label": "Mild PE — deliver at", "value": "37 wks"}]}, {"topic": "Diabetes in Pregnancy", "items": [{"label": "75 g OGTT — fasting cut-off", "value": "≥92 mg/dL (5.1 mmol/L)"}, {"label": "75 g OGTT — 1-hour cut-off", "value": "≥180 mg/dL (10 mmol/L)"}, {"label": "75 g OGTT — 2-hour cut-off", "value": "≥153 mg/dL (8.6 mmol/L)"}, {"label": "Glycaemic target — fasting", "value": "<95 mg/dL (5.3 mmol/L)"}, {"label": "Glycaemic target — 1-h post-meal", "value": "<140 mg/dL (7.8 mmol/L)"}, {"label": "Glycaemic target — 2-h post-meal", "value": "<120 mg/dL (6.6 mmol/L)"}, {"label": "Start insulin if fasting BG", "value": "≥7.0 mmol/L"}, {"label": "Elective CS — predicted birth weight", "value": ">4.5 kg"}, {"label": "Delivery — uncontrolled GDM", "value": "37–38+6 wks"}, {"label": "HbA1c — advise against pregnancy", "value": ">10%"}, {"label": "Post-GDM — repeat OGTT at", "value": "6–12 weeks postpartum"}]}, {"topic": "Anaemia & Platelets in Pregnancy", "items": [{"label": "Anaemia — 1st trimester threshold", "value": "Hb <11 g/dL"}, {"label": "Anaemia — 2nd & 3rd trimester threshold", "value": "Hb <10.5 g/dL"}, {"label": "Ferritin — IDA threshold", "value": "<15 ng/mL"}, {"label": "Oral iron dose (elemental)", "value": "100–200 mg/day"}, {"label": "ITP — treat if platelets", "value": "<20,000 or symptomatic"}, {"label": "ITP — safe delivery", "value": "≥50,000"}, {"label": "ITP — safe spinal anaesthesia", "value": "≥75,000"}, {"label": "Gestational thrombocytopenia — no fetal risk if", "value": "platelets >70,000"}]}, {"topic": "Antepartum Haemorrhage", "items": [{"label": "Placenta praevia incidence", "value": "1/250 deliveries"}, {"label": "Abruption — IUGR association", "value": "80%"}, {"label": "Abruption recurrence — 1 / 2 episodes", "value": "8–17% / 25%"}, {"label": "LUS formation timing", "value": "28–32 wks"}]}, {"topic": "Postpartum Haemorrhage & Puerperium", "items": [{"label": "Primary PPH — vaginal delivery threshold", "value": ">500 mL within 24 h"}, {"label": "Primary PPH — CS threshold", "value": ">1000 mL within 24 h"}, {"label": "PPH — Tone (atony) frequency", "value": "80%"}, {"label": "Oxytocin (PPH) — bolus", "value": "5 U IV; infusion 20 U in 1 L NS"}, {"label": "Carboprost dose (PGF2α)", "value": "250 mcg IM (80–90% effective)"}, {"label": "Misoprostol (PPH) dose", "value": "1000 mcg rectal"}, {"label": "Puerperal fever definition", "value": ">38°C for >24 h within first 10 days"}, {"label": "Postpartum psychosis incidence / onset / recurrence", "value": "1:500–1:1000; day 4–5; recurrence 20%"}]}, {"topic": "Rh Isoimmunisation", "items": [{"label": "Anti-D dose <20 wks / >20 wks / per ml fetal blood", "value": "250 IU / 500 IU / +100 IU per ml"}, {"label": "Anti-D — give within", "value": "72 h of sensitising event"}, {"label": "MCA-PSV — fetal anaemia threshold", "value": ">1.5× median"}, {"label": "Kernicterus — UCB threshold", "value": ">310–350 µmol/L"}]}, {"topic": "Fetal Growth, AFI & Multiple Pregnancy", "items": [{"label": "SGA definition", "value": "<10th centile"}, {"label": "Asymmetrical IUGR proportion", "value": "80%"}, {"label": "AFI — oligohydramnios", "value": "≤5 cm"}, {"label": "AFI — polyhydramnios", "value": "≥25 cm"}, {"label": "Max vertical pool — normal", "value": "2–8 cm"}, {"label": "MCDA — most common MZ type (split days 4–8)", "value": "70%"}, {"label": "TTTS — complicates MCDA", "value": "15%"}, {"label": "TTTS — laser surgery survival", "value": "85% (vs amnioreduction 60%)"}, {"label": "DCDA delivery", "value": "37+0 wks"}, {"label": "MCDA delivery", "value": "36+0 wks"}, {"label": "MCMA delivery", "value": "32+0–33+6 wks (CS)"}, {"label": "Down syndrome risk at 35 / 40 / 45 yrs", "value": "1:250 / 1:35 / 1:25"}]}, {"topic": "Menstrual Cycle & AUB", "items": [{"label": "Normal cycle length", "value": "21–35 days"}, {"label": "Luteal phase — fixed duration", "value": "14 days"}, {"label": "Ovulation — after LH surge", "value": "24–36 hours"}, {"label": "Day-21 progesterone — confirms ovulation", "value": ">5 ng/dL"}, {"label": "Menorrhagia objective threshold", "value": "≥80 mL per cycle"}, {"label": "Mirena — MBL reduction", "value": "80–90%"}, {"label": "Post-menopausal TVS — biopsy threshold", "value": "≥4 mm"}, {"label": "Atypical hyperplasia — concurrent cancer risk", "value": "43%"}, {"label": "Complex hyperplasia with atypia → cancer", "value": "30%"}, {"label": "Endometrial biopsy mandatory if", "value": "≥45 yrs or <45 + persistent/anovulatory bleeding"}]}, {"topic": "Amenorrhoea", "items": [{"label": "Primary amenorrhoea — no 2° sex characteristics", "value": "by age 14"}, {"label": "Primary amenorrhoea — with 2° sex characteristics", "value": "by age 16"}, {"label": "Turner syndrome karyotype", "value": "45 XO"}, {"label": "Androgen insensitivity karyotype", "value": "46 XY"}, {"label": "POI FSH (×2 occasions 1 month apart)", "value": ">40 mIU/mL; age <40"}]}, {"topic": "Benign Gynaecology — Fibroids, Endometriosis, PID", "items": [{"label": "GnRH agonists — fibroid volume reduction", "value": "30% over 6 months"}, {"label": "Endometrioma — cystectomy if", "value": ">3 cm"}, {"label": "Endometriosis staging — moderate (stage III)", "value": "score 16–40"}, {"label": "Endometriosis staging — severe (stage IV)", "value": "score >40"}, {"label": "BV treatment", "value": "Metronidazole 400 mg BD × 5–7 days OR 2 g single dose"}, {"label": "Candida treatment", "value": "Fluconazole 150 mg stat"}, {"label": "Trichomoniasis treatment", "value": "Metronidazole 2 g single dose + treat partner"}, {"label": "PID — total antibiotic course", "value": "14 days (IV until afebrile 24 h, then oral)"}]}, {"topic": "Contraception", "items": [{"label": "COCP — stop before major surgery", "value": "4 weeks"}, {"label": "POP — missed pill window", "value": "3-hour window"}, {"label": "DMPA — fertility return delay", "value": "9–12 months"}, {"label": "Implant (Nexplanon) failure rate / duration", "value": "0.1%/yr; 3 years"}, {"label": "Copper IUD — duration / as EC within", "value": "10 years / 5 days (99% efficacy)"}, {"label": "LNG-IUS (Mirena) failure rate / duration", "value": "0.09%/yr; 5 years"}, {"label": "LAM efficacy (all 3 criteria — exclusive BF, amenorrhoeic, <6 months)", "value": ">98%"}, {"label": "Emergency LNG (Levonelle) — within", "value": "3 days (85%)"}, {"label": "Emergency UPSA (ellaOne 30 mg) — within", "value": "5 days (96%)"}]}, {"topic": "Infertility", "items": [{"label": "Infertility definition", "value": "1 year unprotected intercourse; evaluate at 6 months if ≥35 yr"}, {"label": "Semen — concentration (WHO 2010)", "value": ">15 million/mL"}, {"label": "Semen — morphology", "value": ">4%"}, {"label": "Semen — progressive motility", "value": ">32%"}, {"label": "Day-21 progesterone — ovulation confirmed", "value": ">4 ng/mL"}, {"label": "Day-3 FSH — normal reserve", "value": "<10 mIU/mL"}, {"label": "Clomiphene — cumulative pregnancy rate / multiple gestation risk", "value": "40% / 7%"}, {"label": "IVF embryo transfer — age <35 / >35", "value": "2 / 3 embryos"}]}, {"topic": "Menopause & HRT", "items": [{"label": "Menopause — 12 months amenorrhoea; average age", "value": "51 (range 45–55)"}, {"label": "POI definition", "value": "<40 yrs + FSH >40 mIU/mL ×2 occasions 1 month apart"}, {"label": "Hot flushes prevalence", "value": "85%"}, {"label": "Osteoporosis T-score threshold", "value": "≥2.5 SD below young-adult mean"}, {"label": "Collagen loss — 1st 5 years", "value": "30%"}, {"label": "Early menopause without oestrogen — CHD risk", "value": "2–4× increase"}, {"label": "PMB TVS — biopsy threshold", "value": ">3 mm"}, {"label": "Raloxifene — vertebral fracture reduction", "value": "50%"}, {"label": "Continuous combined HRT — spotting normalises by", "value": "3–6 months"}]}, {"topic": "Urogynaecology", "items": [{"label": "Normal bladder capacity", "value": "400–600 mL"}, {"label": "First desire to void (cystometry)", "value": "150–250 mL"}, {"label": "Overflow incontinence — PVR threshold", "value": ">200 mL"}, {"label": "Duloxetine dose (SUI 3rd line)", "value": "20 mg BD"}, {"label": "Mirabegron dose (OAB β3-agonist)", "value": "50 mg"}, {"label": "Botox (OAB) — effect duration", "value": "~6 months"}, {"label": "TVT continence success", "value": "95%"}, {"label": "Anterior colporrhaphy alone — continence success", "value": "50%"}]}, {"topic": "Gynaecologic Oncology", "items": [{"label": "Cervical cancer — HPV 16 & 18", "value": ">70% of cases"}, {"label": "HPV to invasive cancer — average time", "value": "15 years"}, {"label": "Cervical screening — start age", "value": "21 years"}, {"label": "Cervical screening — age 21–29", "value": "cytology every 3 years"}, {"label": "Cervical screening — age 30–65 co-testing", "value": "every 5 years"}, {"label": "Trachelectomy eligibility", "value": "lesion ≤2 cm, no LN mets"}, {"label": "Endometrial cancer — peak age", "value": "61 years; 80–85% Type 1"}, {"label": "PMB TVS — biopsy threshold (endometrial Ca)", "value": ">3 mm"}, {"label": "Ovarian cancer — stage 3 at presentation", "value": "75%"}, {"label": "Ovarian cancer — 5-year survival stage 1 / stage 4", "value": "95% / 20%"}, {"label": "Ovarian chemo — from stage 1c; regimen", "value": "6 cycles platinum + Taxol q3 weeks"}, {"label": "BRCA1 — lifetime ovarian / breast Ca risk", "value": "50% / 70%"}, {"label": "RMI >250 — action", "value": "staging laparotomy in cancer centre"}, {"label": "Dermoid cyst — bilateral rate / peak age", "value": "20% / 20–30 yrs"}]}]};
+(function(){ var host=document.getElementById('numList'); if(!host)return;
+  (NUMBERS.groups||[]).forEach(function(g){
+    var rows=(g.items||[]).map(function(it){ var s=(g.topic+' '+it.label+' '+it.value).toLowerCase().replace(/"/g,'');
+      return '<div class="num-row" data-s="'+s+'"><span class="num-l">'+it.label+'</span><span class="num-v">'+it.value+'</span></div>'; }).join('');
+    var d=document.createElement('div'); d.className='num-g'; d.innerHTML='<div class="num-h">'+g.topic+'</div>'+rows; host.appendChild(d);
+  }); })();
+function openNum(){ document.getElementById('numModal').classList.add('show'); var f=document.getElementById('numFilter'); if(f){f.value='';f.focus();filterNum();} }
+function closeNum(){ document.getElementById('numModal').classList.remove('show'); }
+function filterNum(){ var q=document.getElementById('numFilter').value.trim().toLowerCase();
+  document.querySelectorAll('#numList .num-g').forEach(function(g){ var any=false;
+    g.querySelectorAll('.num-row').forEach(function(r){ var hit=q.length===0||r.getAttribute('data-s').indexOf(q)>-1; r.style.display=hit?'':'none'; if(hit)any=true; });
+    g.style.display=any?'':'none'; }); }
+// wire modal buttons
+function _w(id,fn,ev){ var e=document.getElementById(id); if(e){ if(ev==='input')e.addEventListener('input',fn); else if(ev==='change')e.addEventListener('change',fn); else e.onclick=fn; } }
+_w('openNum',openNum); _w('openNum2',openNum); _w('numClose',closeNum); _w('numDrop',closeNum); _w('numFilter',filterNum,'input');
+_w('openFC',openFC); _w('openFC2',openFC); _w('fcClose',closeFC); _w('fcDrop',closeFC);
+_w('fcFlipBtn',fcFlip); _w('fcCard',fcFlip); _w('fcNext',function(){fcGo(1);}); _w('fcPrev',function(){fcGo(-1);});
+_w('fcShuffle',function(){buildDeck();renderCard();}); _w('fcScope',function(){fcScope=this.value;buildDeck();renderCard();},'change');
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeNum(); closeFC(); }
+  else if(document.getElementById('fcModal').classList.contains('show')){
+    if(e.key==='ArrowRight')fcGo(1); else if(e.key==='ArrowLeft')fcGo(-1); else if(e.key===' '||e.key==='Enter'){e.preventDefault();fcFlip();} } });
 </script>
 </body></html>
