@@ -240,6 +240,14 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 #progMini{margin:8px 14px 2px;font-size:12px;color:#e8d6e6}
 #progMini b{color:#fff}
 @media(max-width:700px){.prog-card{flex-wrap:wrap}.prog-tools{align-items:flex-start;width:100%}}
+/* sticky progress strip (under topbar) */
+#progSticky{position:sticky;z-index:25;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);
+ padding:8px 26px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#progSticky .ps-track{flex:1 1 150px;max-width:300px;height:9px;background:#ece6ef;border-radius:6px;overflow:hidden}
+#progSticky .ps-fill{height:100%;width:0;background:linear-gradient(90deg,var(--brand),#8b2fc9);border-radius:6px;transition:width .35s}
+#progSticky .ps-txt{font-size:12.5px;font-weight:700;color:var(--brand2);white-space:nowrap}
+#progSticky .ps-filter{margin-left:auto}
+@media(max-width:560px){#progSticky{padding:7px 14px}#progSticky .ps-txt{font-size:12px}}
 /* ===== shared modal (flashcards + numbers) ===== */
 .smodal{display:none;position:fixed;inset:0;z-index:130;align-items:flex-start;justify-content:center}
 .smodal.show{display:flex}
@@ -327,6 +335,15 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
    <span class="ttl">Obstetrics &amp; Gynaecology Study Hub</span>
    <input id="search" placeholder="Search topics (e.g. praevia, ectopic, fibroid)…">
    <button id="toggleAns">Show all answers</button>
+ </div>
+ <div id="progSticky">
+   <div class="ps-track"><div class="ps-fill" id="progStickyFill"></div></div>
+   <span class="ps-txt" id="progStickyTxt">0 / 44 done</span>
+   <div class="progfilter ps-filter">
+     <button data-f="all" class="active">All</button>
+     <button data-f="left">What&rsquo;s left</button>
+     <button data-f="review">&starf;</button>
+   </div>
  </div>
  <div class="wrap">
    <div class="intro-card">
@@ -3528,7 +3545,7 @@ document.querySelectorAll('.system').forEach(function(s){
    var badge=document.createElement('span'); badge.className='sec-count';
    badge.textContent=nt+' topics · 5 Qs'; title.appendChild(badge);
  }
- s.classList.add('sec-collapsed');
+ // sections start OPEN (topic list visible); topics start collapsed
  title.addEventListener('click',function(){ s.classList.toggle('sec-collapsed'); });
 });
 function setAll(collapsed){ document.querySelectorAll('.topic').forEach(function(t){ t.classList.toggle('collapsed',collapsed); }); }
@@ -3562,7 +3579,7 @@ search.addEventListener('input',function(){
    var vis=[].slice.call(s.querySelectorAll('.topic')).some(function(t){return !t.classList.contains('hiddenbysearch')});
    s.style.display=(q.length>1 && !vis)?'none':'';
    if(q.length>1){ s.classList.toggle('sec-collapsed', !vis); }
-   else { s.classList.add('sec-collapsed'); }
+   else { s.classList.remove('sec-collapsed'); s.style.display=''; }
  });
  if(q.length<=1){ document.querySelectorAll('.topic').forEach(function(t){t.classList.add('collapsed')}); }
 });
@@ -3806,6 +3823,11 @@ function updateProgress(){
   }
   var sub=document.getElementById('progSub'); if(sub) sub.innerHTML=review?('<b>'+review+'</b> marked ★ for review'):'';
   var sm=document.getElementById('progMini'); if(sm) sm.innerHTML='<b>'+done+'</b>/'+total+' topics done';
+  var sf=document.getElementById('progStickyFill'); if(sf) sf.style.width=pct+'%';
+  var st=document.getElementById('progStickyTxt');
+  if(st){ st.innerHTML = done===0 ? ('0 / '+total+' done &middot; tap ○ Mark as you go')
+            : (done===total ? ('All '+total+' done &#10003;')
+            : ('<b>'+done+'</b>/'+total+' done &middot; '+left+' to go'+(review?(' &middot; &starf;'+review):''))); }
   document.querySelectorAll('.system').forEach(function(sec){
     var ts=[].slice.call(sec.querySelectorAll('.topic'));
     var d=ts.filter(function(t){return prog[t.id]==='done';}).length;
@@ -3828,6 +3850,10 @@ function setFilter(m){ fMode=m; document.querySelectorAll('.progfilter button').
 document.querySelectorAll('.progfilter button').forEach(function(b){ b.addEventListener('click',function(){ setFilter(b.getAttribute('data-f')); }); });
 var pr=document.getElementById('progReset'); if(pr) pr.onclick=function(){ if(confirm('Reset all your progress marks?')){ prog={}; saveProg(); TOPICS.forEach(applyStatus); updateProgress(); setFilter('all'); } };
 updateProgress();
+// keep sticky progress strip just under the (sticky) topbar at all widths
+(function(){ var tb=document.getElementById('topbar'), ps=document.getElementById('progSticky');
+  function setTop(){ if(tb&&ps) ps.style.top=tb.offsetHeight+'px'; }
+  setTop(); window.addEventListener('resize',setTop); window.addEventListener('load',setTop); })();
 // ---- Flashcards ----
 var fcCards=[],fcIdx=0,fcFlipped=false,fcScope='all';
 function buildDeck(){
