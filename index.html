@@ -3494,6 +3494,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   </div>
 </div>
 <script>
+function track(n,p){ try{ if(window.gtag) gtag('event',n,p||{}); }catch(e){} }
 var ham=document.getElementById('hamburger'), sb=document.getElementById('sidebar');
 var backdrop=document.getElementById('sb-backdrop');
 function openSb(){ sb.classList.add('open'); if(backdrop) backdrop.classList.add('show'); }
@@ -3532,7 +3533,7 @@ document.querySelectorAll('.topic').forEach(function(t){
    while(n){ var nx=n.nextSibling; body.appendChild(n); n=nx; }
    t.appendChild(body);
  }
- t.classList.add('collapsed'); title.addEventListener('click',function(){ t.classList.toggle('collapsed'); });
+ t.classList.add('collapsed'); title.addEventListener('click',function(){ t.classList.toggle('collapsed'); if(!t.classList.contains('collapsed')) track('topic_open',{id:t.id}); });
 });
 document.querySelectorAll('.system').forEach(function(s){
  var title=s.querySelector('.sys-title');
@@ -3545,7 +3546,7 @@ document.querySelectorAll('.system').forEach(function(s){
    var badge=document.createElement('span'); badge.className='sec-count';
    badge.textContent=nt+' topics · 5 Qs'; title.appendChild(badge);
  }
- // sections start OPEN (topic list visible); topics start collapsed
+ s.classList.add('sec-collapsed');   // sections (parts) collapsed on load too
  title.addEventListener('click',function(){ s.classList.toggle('sec-collapsed'); });
 });
 function setAll(collapsed){ document.querySelectorAll('.topic').forEach(function(t){ t.classList.toggle('collapsed',collapsed); }); }
@@ -3579,7 +3580,7 @@ search.addEventListener('input',function(){
    var vis=[].slice.call(s.querySelectorAll('.topic')).some(function(t){return !t.classList.contains('hiddenbysearch')});
    s.style.display=(q.length>1 && !vis)?'none':'';
    if(q.length>1){ s.classList.toggle('sec-collapsed', !vis); }
-   else { s.classList.remove('sec-collapsed'); s.style.display=''; }
+   else { s.classList.add('sec-collapsed'); s.style.display=''; }
  });
  if(q.length<=1){ document.querySelectorAll('.topic').forEach(function(t){t.classList.add('collapsed')}); }
 });
@@ -3648,7 +3649,7 @@ function updateProg(){
 function startMock(paper){
  if(started) return;
  if(paper){ curPaper=paper; MOCK=MOCKS[paper]; }
- started=true;
+ started=true; track('mock_start',{paper:curPaper});
  document.getElementById('mockStart').style.display='none';
  document.getElementById('mockBar').style.display='flex';
  document.getElementById('mockQuestions').style.display='block';
@@ -3680,6 +3681,7 @@ function gradeMock(auto){
    mq.querySelector('.exp').innerHTML='<b>Correct: '+corrText+'.</b> '+item.explanation;
  });
  var pct=Math.round(correct/MOCK.length*100);
+ track('mock_graded',{paper:curPaper,score:pct});
  var grade = pct>=80?'Excellent (A)':pct>=70?'Strong (B+)':pct>=60?'Solid (B / pass range)':pct>=50?'Borderline — review weak areas':'Needs more revision';
  var other = curPaper==='A' ? 'B' : 'A';
  var sc=document.getElementById('scorecard'); sc.style.display='block';
@@ -3748,7 +3750,7 @@ try{ wrapAbbr(document.querySelector('.wrap')); }catch(e){}
    var d=document.createElement('div'); d.className='abrow'; d.innerHTML='<b>'+k+'</b> &mdash; '+GLOSSARY[k]; list.appendChild(d);
  });
 })();
-function openAbbr(){ var m=document.getElementById('abbrModal'); m.classList.add('show'); var f=document.getElementById('abbrFilter'); if(f){f.value='';f.focus();filterAbbr();} }
+function openAbbr(){ track('abbreviations_open'); var m=document.getElementById('abbrModal'); m.classList.add('show'); var f=document.getElementById('abbrFilter'); if(f){f.value='';f.focus();filterAbbr();} }
 function closeAbbr(){ document.getElementById('abbrModal').classList.remove('show'); }
 function filterAbbr(){
  var q=document.getElementById('abbrFilter').value.trim().toLowerCase();
@@ -3802,7 +3804,7 @@ TOPICS.forEach(function(t){
   var h=t.querySelector('.topic-title'); if(!h) return;
   var b=document.createElement('button'); b.type='button'; b.className='statusbtn'; b.textContent='○ Mark';
   b.title='Mark your confidence';
-  b.addEventListener('click',function(e){ e.stopPropagation(); var ns=nextStatus(prog[t.id]||null); if(ns) prog[t.id]=ns; else delete prog[t.id]; saveProg(); applyStatus(t); updateProgress(); });
+  b.addEventListener('click',function(e){ e.stopPropagation(); var ns=nextStatus(prog[t.id]||null); if(ns) prog[t.id]=ns; else delete prog[t.id]; saveProg(); applyStatus(t); updateProgress(); track('topic_marked',{status:ns||'cleared'}); });
   h.appendChild(b); applyStatus(t);
 });
 function updateProgress(){
@@ -3875,7 +3877,7 @@ function renderCard(){
 }
 function fcFlip(){ fcFlipped=!fcFlipped; document.getElementById('fcCard').classList.toggle('flipped',fcFlipped); }
 function fcGo(d){ if(!fcCards.length)return; fcIdx=(fcIdx+d+fcCards.length)%fcCards.length; fcFlipped=false; renderCard(); }
-function openFC(){ buildDeck(); renderCard(); document.getElementById('fcModal').classList.add('show'); }
+function openFC(){ track('flashcards_open',{scope:fcScope}); buildDeck(); renderCard(); document.getElementById('fcModal').classList.add('show'); }
 function closeFC(){ document.getElementById('fcModal').classList.remove('show'); }
 (function(){ var sel=document.getElementById('fcScope'); if(!sel)return;
   document.querySelectorAll('.system').forEach(function(sec){ var o=document.createElement('option'); o.value=sec.id; o.textContent=secName(sec); sel.appendChild(o); }); })();
@@ -3887,7 +3889,7 @@ var NUMBERS={"groups": [{"topic": "Obstetric History & Examination", "items": [{
       return '<div class="num-row" data-s="'+s+'"><span class="num-l">'+it.label+'</span><span class="num-v">'+it.value+'</span></div>'; }).join('');
     var d=document.createElement('div'); d.className='num-g'; d.innerHTML='<div class="num-h">'+g.topic+'</div>'+rows; host.appendChild(d);
   }); })();
-function openNum(){ document.getElementById('numModal').classList.add('show'); var f=document.getElementById('numFilter'); if(f){f.value='';f.focus();filterNum();} }
+function openNum(){ track('numbers_open'); document.getElementById('numModal').classList.add('show'); var f=document.getElementById('numFilter'); if(f){f.value='';f.focus();filterNum();} }
 function closeNum(){ document.getElementById('numModal').classList.remove('show'); }
 function filterNum(){ var q=document.getElementById('numFilter').value.trim().toLowerCase();
   document.querySelectorAll('#numList .num-g').forEach(function(g){ var any=false;
