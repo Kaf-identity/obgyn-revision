@@ -121,6 +121,41 @@ a{color:var(--brand);text-decoration:none}
 .box.flag{border-color:var(--flag);background:var(--flagbg)} .box.flag .lbl{background:var(--flag)}
 .box.buzz{border-color:var(--buzz);background:var(--buzzbg)} .box.buzz .lbl{background:var(--buzz)}
 .mnem{background:#fff7ed;border:1px dashed #f0b366;border-radius:9px;padding:8px 12px;margin:9px 0;font-size:13.5px}
+/* ===== Compact "must-know" block + Compact mode ===== */
+.compact{display:none;border-left:4px solid #0d9488;background:#e7f7f4;border-radius:0 9px 9px 0;padding:10px 13px;margin:9px 0;font-size:14px}
+.compact .lbl{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:2px 8px;border-radius:5px;margin-right:8px;color:#fff;background:#0d9488;vertical-align:middle}
+.compact ul{margin:8px 0 2px;padding-left:20px}
+.compact li{margin:4px 0;line-height:1.45}
+.topic > .compact{margin-left:18px;margin-right:18px}
+/* mini comparison table inside the compact block */
+.compact .tbl-wrap{margin:10px 0 2px}
+.compact table.cmp{margin:0;font-size:12.7px;background:#fff}
+.compact table.cmp th,.compact table.cmp td{padding:6px 8px}
+table.cmp.mini thead th{background:#0d9488}
+table.cmp.mini td:first-child{background:#dff3f0;color:#0a6e64}
+table.cmp.mini tbody tr:nth-child(even){background:#f3faf9}
+/* in Compact mode: show the must-know block (+ keep mnemonic & see-also), hide the long content */
+body.mode-compact .topic-body > .compact{display:block}
+body.mode-compact .topic-body > .box,
+body.mode-compact .topic-body > .tbl-wrap,
+body.mode-compact .topic-body > table.cmp{display:none}
+#modeToggle{background:var(--brand)!important;color:#fff!important;border-color:var(--brand)!important;font-weight:700}
+#modeToggle:hover{filter:brightness(1.08)}
+body.mode-compact #modeToggle{background:#0d9488!important;border-color:#0d9488!important}
+#compactBanner{display:none;background:#0d9488;color:#fff;text-align:center;font-size:12.5px;font-weight:600;padding:6px 14px}
+body.mode-compact #compactBanner{display:block}
+/* big Compact/Full picker under each session header */
+.mode-picker{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin:0 0 20px;box-shadow:0 1px 3px rgba(40,20,40,.05)}
+.mode-picker .mp-btns{display:flex;gap:12px}
+.mode-picker .mp-btn{flex:1 1 0;padding:15px 14px;border-radius:12px;border:2px solid var(--line);background:#fbfafc;font-size:16px;font-weight:800;cursor:pointer;color:var(--brand2);display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .05s}
+.mode-picker .mp-btn:hover{border-color:#c9bcd0}
+.mode-picker .mp-btn:active{transform:scale(.98)}
+.mode-picker .mp-btn[data-mode="compact"].active{background:#0d9488;border-color:#0d9488;color:#fff;box-shadow:0 2px 8px rgba(13,148,136,.3)}
+.mode-picker .mp-btn[data-mode="full"].active{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:0 2px 8px rgba(190,24,80,.25)}
+.mode-picker .mp-note{margin-top:11px;font-size:13.5px;color:var(--muted);text-align:center;line-height:1.5}
+.mode-picker .mp-note b{color:var(--brand2)}
+@media(max-width:560px){.mode-picker .mp-btns{flex-direction:column}.mode-picker .mp-btn{font-size:15px;padding:13px}}
+@media(max-width:900px){.topic > .compact{margin-left:0;margin-right:0}}
 /* tables */
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0;border-radius:8px}
 .tbl-wrap>table.cmp{margin:0}
@@ -336,8 +371,10 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
    <button id="hamburger">&#9776;</button>
    <span class="ttl">Obstetrics &amp; Gynaecology Study Hub</span>
    <input id="search" placeholder="Search topics (e.g. praevia, ectopic, fibroid)…">
+   <button id="modeToggle">&#9889; Compact mode</button>
    <button id="toggleAns">Show all answers</button>
  </div>
+ <div id="compactBanner">&#9889; Compact mode &mdash; showing only the must-know essentials per topic. Tap &ldquo;Full mode&rdquo; for the detail, tables &amp; pearls.</div>
  <div id="progSticky">
    <div class="ps-track"><div class="ps-fill" id="progStickyFill"></div></div>
    <span class="ps-txt" id="progStickyTxt">0 / 44 done</span>
@@ -361,6 +398,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
      </div>
      <div class="intro-actions">
        <button class="cta" onclick="document.getElementById('mock-section').scrollIntoView()">&#9654; Start a Mock Exam</button>
+       <button class="ghost" id="modeToggle2">&#9889; Compact mode</button>
        <button class="ghost" onclick="var s=document.getElementById('search');s.scrollIntoView();s.focus()">&#128269; Search topics</button>
        <button class="ghost" id="openFC2">&#127183; Flashcards</button>
        <button class="ghost" id="openNum2">&#128290; Numbers &amp; cut-offs</button>
@@ -386,6 +424,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
      </div>
    </div>
 <div class="part-banner" id="part-obs"><span class="part-kicker">Part 1 &middot; Session A</span><h2>Obstetrics</h2><p>Pregnancy, labour and the puerperium &mdash; maternal-fetal medicine.</p></div>
+<div class="mode-picker"><div class="mp-btns"><button class="mp-btn" data-mode="compact">&#9889; Compact mode</button><button class="mp-btn" data-mode="full">&#128214; Full mode</button></div><div class="mp-note"><b>Compact</b> &mdash; all you need to know for the exam. <b>Full</b> &mdash; if you need more detail to understand something.</div></div>
 <section class="system" id="sys-anc" data-system="Antenatal Care &amp; Fetal Assessment">
 <h2 class="sys-title">1. Antenatal Care &amp; Fetal Assessment</h2>
 <p class="sys-intro">booking, physiology, screening, CTG interpretation and prescribing in pregnancy</p>
@@ -393,6 +432,15 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════════════ TOPIC 1 -->
   <article class="topic" id="sys-anc-t1">
     <h3 class="topic-title">Obstetric History &amp; Examination</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Gravida</b> = total pregnancies; <b>Para</b> = deliveries after viability (24 wks); currently pregnant adds to G, not P until delivered.</li>
+      <li><b>EDD</b> = LMP + 9 months + 7 days (Naegele's rule).</li>
+      <li>Normal <b>FHR 110–160 bpm</b>; heard on Doppler from 10–14 wks, fetoscope from 28 wks.</li>
+      <li>MC lie = <b>longitudinal (99%)</b>; MC presentation = <b>cephalic (96%)</b>; malpresentation order: <b>Breech &gt; transverse &gt; face &gt; brow</b>.</li>
+      <li>Largest presenting diameter = <b>brow (supraoccipitomental 13.5 cm)</b> — undeliverable vaginally; vertex OA = 9.5 cm.</li>
+      <li><b>True vs false labour trap:</b> true labour = regular contractions + cervical change; false labour = no cervical change.</li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       <b>Gravida</b> = total pregnancies regardless of outcome; <b>Para</b> = deliveries after age of viability (24 wks); EDD = LMP + 9 months + 7 days.
@@ -426,6 +474,15 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════════════ TOPIC 2 -->
   <article class="topic" id="sys-anc-t2">
     <h3 class="topic-title">Physiological Changes in Pregnancy</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Plasma volume ↑50%</b>; RBC mass ↑20–30% → dilutional anaemia (physiological, not pathological).</li>
+      <li><b>CO ↑30–50%</b>; HR ↑10–20 bpm; SVR ↓ → BP ↓ in 2nd trimester — a BP <em>rise</em> is pathological.</li>
+      <li><b>GFR ↑50%</b> → creatinine &amp; BUN ↓; glycosuria is normal (tubular max exceeded) — does NOT = GDM.</li>
+      <li>Hypercoagulable: <b>↑fibrinogen, VII, VIII; ↓protein S</b> → ↑VTE risk throughout pregnancy.</li>
+      <li><b>Right &gt; left hydronephrosis</b> — uterine dextrorotation; normal finding.</li>
+      <li>Trap: <b>betamethasone/dexamethasone</b> cross placenta (fetal lung maturation); hydrocortisone 90% inactivated by placenta.</li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       Coordinated maternal adaptations across all organ systems to support fetoplacental growth; most resolve postpartum.
@@ -462,6 +519,15 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════════════ TOPIC 3 -->
   <article class="topic" id="sys-anc-t3">
     <h3 class="topic-title">Antenatal Care &amp; Screening</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Booking visit = 10 wks</b>: FBC, group &amp; Rh, HBsAg, rubella IgG, RBS, U/A; rubella seronegative → postnatal MMR.</li>
+      <li><b>Combined 1st-trimester screen = 11–13+6 wks</b>: NT + β-hCG + PAPP-A; ↑NT + absent nasal bone = Down syndrome.</li>
+      <li><b>Anomaly scan = 18+0–20+6 wks</b>; AC (abdominal circumference) = best single measure of fetal nutrition in 3rd trimester.</li>
+      <li><b>GTT = 24–28 wks</b>; GBS swab = <b>35–37 wks</b>; Anti-D for Rh-negative from <b>28 wks</b>.</li>
+      <li><b>Post-dates IOL = 41+3 wks</b> (10 days after EDD); CTG + AFI at 7 days post-EDD.</li>
+      <li>Live-attenuated vaccines (MMR, varicella, yellow fever) <b>contraindicated</b> in pregnancy; killed/inactivated (influenza, Tdap, HepB) are safe.</li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       Structured programme of visits beginning at <b>booking (10 wks)</b>, then every 4 wks to 28 wks, every 2 wks to 36 wks, then weekly to delivery.
@@ -501,6 +567,22 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-anc-t4">
     <h3 class="topic-title">CTG &amp; Partogram</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li>Normal CTG: baseline <b>110–160 bpm</b>, variability <b>5–25 bpm</b>, accelerations ≥15 bpm for ≥15 sec — accelerations present = acidosis unlikely.</li>
+      <li><b>Early decel</b> = head compression, mirrors contraction, benign — no intervention.</li>
+      <li><b>Variable decel</b> = cord compression, abrupt onset (&lt;30 sec to nadir); emergent CS if &gt;60 sec, biphasic, or ↓ variability.</li>
+      <li><b>Late decel</b> = uteroplacental insufficiency, gradual (&gt;30 sec), ominous → FBS; deliver if pH &lt;7.2.</li>
+      <li><b>Sinusoidal CTG</b> = severe fetal anaemia/hypoxia — smooth wave 2–5 cycles/min, zero beat-to-beat variability; high mortality.</li>
+      <li>Partogram: <b>alert line</b> = 1 cm/hr; <b>action line</b> = 4 hrs right of alert → failure to progress, consider CS.</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Feature</th><th>Early Decel</th><th>Variable Decel</th><th>Late Decel</th></tr></thead><tbody>
+      <tr><td>Onset to nadir</td><td>Mirrors contraction</td><td><b>&lt;30 sec</b> (abrupt)</td><td><b>&gt;30 sec</b> (gradual)</td></tr>
+      <tr><td>Cause</td><td>Head compression</td><td><b>Cord compression</b></td><td><b>Uteroplacental insufficiency / abruption</b></td></tr>
+      <tr><td>Significance</td><td>Benign</td><td>Concerning if &gt;60 sec / biphasic</td><td><b>Ominous</b> — FBS; deliver if pH &lt;7.2</td></tr>
+      <tr><td>Action</td><td>None</td><td>Reposition; emergent CS if severe</td><td>Conservative → FBS → deliver</td></tr>
+    </tbody></table>
+    </div>
+
     <div class="box def"><span class="lbl">Definition</span>
       CTG = continuous electronic record of FHR + uterine contractions; partogram = graphical record of labour progress plotted against time.
     </div>
@@ -535,6 +617,15 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════════════ TOPIC 5 -->
   <article class="topic" id="sys-anc-t5">
     <h3 class="topic-title">Drugs in Pregnancy</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li>Teratogenic window = <b>organogenesis (days 20–55 post-fertilisation; ~5–10 wks LMP)</b>; before day 20 = all-or-nothing.</li>
+      <li><b>Category X</b> (absolutely contraindicated): warfarin, statins, isotretinoin, methotrexate, thalidomide, griseofulvin, DES — mnemonic <b>SWIM GT</b>.</li>
+      <li><b>Lithium → Ebstein's anomaly</b> (tricuspid); valproate → NTDs; tetracycline → tooth discolouration; ACE/ARBs → oligohydramnios + renal agenesis.</li>
+      <li><b>PTU</b> preferred in 1st trimester (methimazole → aplasia cutis); <b>methimazole</b> preferred 2nd–3rd (PTU → liver failure).</li>
+      <li><b>Chloramphenicol → grey baby syndrome</b>; SSRIs in 3rd trim → persistent pulmonary hypertension of newborn.</li>
+      <li>Safest antibiotic = <b>penicillins/cephalosporins (Cat B)</b>; insulin = treatment of choice for diabetes in pregnancy.</li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       Critical teratogenic window = <b>organogenesis (20–55 days post-fertilisation; ~5–10 wks LMP)</b>; before day 20 = all-or-nothing; after organogenesis = functional defects only.
@@ -660,6 +751,24 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-earlypreg-t1">
     <h3 class="topic-title">Miscarriage (Types &amp; Management)</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Miscarriage</b> = loss of pregnancy &lt;24 weeks; <b>recurrent</b> = ≥3 consecutive losses (1% of women).</li>
+      <li><b>Closed cervix</b> → Threatened (FH present, reassure) or Complete (empty cavity, reassure) or Missed (no FH, D&amp;C/misoprostol); <b>Open cervix</b> → Inevitable/Incomplete/Septic → resuscitate + evacuate.</li>
+      <li><b>Missed abortion</b> discriminator: CRL &gt;6 mm, no cardiac activity on 2 scans ≥7 days apart.</li>
+      <li>MC cause 1st-trimester loss: <b>chromosomal abnormality</b> (50–70%); MC cause 2nd-trimester: <b>cervical incompetence</b>.</li>
+      <li><b>Septic abortion</b> trap: antibiotics (IV cephalosporin + IV metronidazole) first → evacuate after <b>12 h</b>, NOT immediately.</li>
+      <li><b>Anti-D</b> NOT required for complete or threatened abortion &lt;12 weeks; give for incomplete/inevitable/missed/septic.</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Type</th><th>Cervix</th><th>Bleeding</th><th>Management</th></tr></thead><tbody>
+      <tr><td><b>Threatened</b></td><td>Closed</td><td>Mild</td><td>Reassure (FH present)</td></tr>
+      <tr><td><b>Inevitable</b></td><td><b>Open</b></td><td>Heavy</td><td>Resuscitate → evacuate</td></tr>
+      <tr><td><b>Incomplete</b></td><td><b>Open</b></td><td>Heavy</td><td>Resuscitate → evacuate</td></tr>
+      <tr><td><b>Complete</b></td><td>Closed</td><td>Stopped</td><td>Reassure (empty cavity)</td></tr>
+      <tr><td><b>Missed</b></td><td>Closed</td><td>Minimal/none</td><td>D&amp;C or misoprostol</td></tr>
+      <tr><td><b>Septic</b></td><td><b>Open</b></td><td>Heavy + purulent</td><td>IV ABx → evacuate after <b>12 h</b></td></tr>
+    </tbody></table>
+    </div>
+
     <div class="box def"><span class="lbl">Definition</span>
       Expulsion or extraction of products of conception before fetal viability (&lt;24 weeks); <b>recurrent miscarriage</b> = ≥3 consecutive spontaneous abortions (1% of women of reproductive age).
     </div>
@@ -748,6 +857,16 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-earlypreg-t2">
     <h3 class="topic-title">Ectopic Pregnancy</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Ectopic</b> = implantation outside uterine cavity; <b>leading cause of 1st-trimester pregnancy-related death</b>.</li>
+      <li>MC site: <b>ampulla of fallopian tube (80%)</b>; earliest to rupture: <b>isthmus</b>.</li>
+      <li><b>Discriminatory zone</b>: β-hCG ≥1000–1500 mIU/mL (TV-US) or ≥6000 (TA-US) with no IUP = ectopic until proven otherwise.</li>
+      <li><b>MTX criteria</b> (all must be met): β-hCG &lt;<b>5000</b>, sac ≤<b>4 cm</b>, no cardiac activity, no free fluid, haemodynamically stable.</li>
+      <li>MTX success: β-hCG falls <b>≥15% from day 4→7</b>; day 1–3 rise is normal — do not alarm.</li>
+      <li><b>Ruptured ectopic</b> trap: haemodynamically unstable → emergency surgery, skip MTX criteria entirely.</li>
+      <li><b>Progesterone &lt;5 ng/mL</b> = non-viable pregnancy (100% sensitivity); &gt;25 ng/mL suggests viable IUP.</li>
+    </ul></div>
+
     <div class="box def"><span class="lbl">Definition</span>
       Implantation of a fertilised ovum <b>outside the uterine cavity</b>; accounts for 1–2% of all pregnancies and remains the <b>leading cause of 1st-trimester pregnancy-related death</b>.
     </div>
@@ -809,6 +928,24 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════════ TOPIC 3 -->
   <article class="topic" id="sys-earlypreg-t3">
     <h3 class="topic-title">Molar Pregnancy / GTD</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Complete HM</b>: karyotype <b>46XX</b> (all paternal), no fetus, snowstorm U/S, uterus large for dates, <b>15–20%</b> malignant risk.</li>
+      <li><b>Partial HM</b>: karyotype <b>69XXY</b> (triploid), fetus often present, small uterus, mimics missed abortion, only <b>0.5–1%</b> malignant risk.</li>
+      <li>Buzzword: <b>pre-eclampsia before 20 weeks</b> + vaginal bleeding + vesicle passage = complete HM until proven otherwise.</li>
+      <li>First-line Rx: <b>suction curettage</b>; follow with serial β-hCG weekly until normal ×3.</li>
+      <li>Post-molar GTN diagnosis: β-hCG <b>plateau ×4 over 3 weeks</b> OR <b>rise ×3 over 2 weeks</b> OR elevated ≥6 months.</li>
+      <li>FIGO ≤6 → <b>MTX-FA</b> (low risk); FIGO ≥7 → <b>EMA-CO</b> (high risk); choriocarcinoma MC mets = <b>lung (80%)</b>.</li>
+      <li>Trap: <b>Anti-D given for partial mole only</b>, not complete.</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Feature</th><th>Complete HM</th><th>Partial HM</th></tr></thead><tbody>
+      <tr><td>Karyotype</td><td><b>46XX</b> (all paternal)</td><td><b>69XXY</b> (triploid)</td></tr>
+      <tr><td>Fetus present</td><td>No</td><td>Often yes</td></tr>
+      <tr><td>U/S pattern</td><td><b>Snowstorm</b></td><td>Mimics missed abortion</td></tr>
+      <tr><td>Malignant risk</td><td><b>15–20%</b></td><td>0.5–1%</td></tr>
+      <tr><td>Anti-D</td><td>Not given</td><td><b>Given</b></td></tr>
+    </tbody></table>
+    </div>
 
     <div class="box def"><span class="lbl">Definition</span>
       Gestational trophoblastic disease (GTD) — abnormal proliferation of trophoblast; spectrum from benign <b>hydatidiform mole</b> (complete or partial) to malignant GTN (invasive mole, choriocarcinoma, PSTT).
@@ -887,6 +1024,15 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-earlypreg-t4">
     <h3 class="topic-title">Thrombophilia &amp; Recurrent Miscarriage</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>APS</b> (acquired) = lupus anticoagulant + anticardiolipin Ab → <b>false +ve VDRL</b> + falsely prolonged PTT.</li>
+      <li>Sapporo obstetric criteria: ≥3 losses &lt;10 w OR ≥1 fetal death ≥10 w OR ≥1 premature birth &lt;34 w (severe PET).</li>
+      <li>APS gold-standard Rx: <b>aspirin 75 mg/day + LMWH (enoxaparin 40 mg SC daily)</b>; continue to 34–36 w + 6 w postpartum.</li>
+      <li>MC inherited thrombophilia: <b>Factor V Leiden</b>; LMWH only if high-risk (past VTE, homozygous FVL, AT deficiency).</li>
+      <li><b>LMWH does not cross placenta</b>; stop <b>12 h before</b> induction/epidural; warfarin postpartum only.</li>
+      <li>DVT in pregnancy: classically <b>proximal, left lower limb</b> (May-Thurner mechanism).</li>
+    </ul></div>
+
     <div class="box def"><span class="lbl">Definition</span>
       Increased tendency to form clots; in pregnancy, thrombophilia exaggerates the physiological hypercoagulable state → <b>placental microthrombi → impaired trophoblast invasion → recurrent miscarriage, IUGR, stillbirth, PET</b>.
     </div>
@@ -944,7 +1090,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <div class="mcq-block">
     <h3 class="mcq-head">Test Yourself — Early Pregnancy Complications</h3>
 
-    
+
     <div class="mcq"><p class="q"><b>Q1.</b> Regarding the management of septic abortion, all of the following are correct EXCEPT:</p>
 <ol class="opts" type="A"><li>It is defined as an incomplete abortion complicated by infection of the uterine contents.</li><li>IV cephalosporin combined with IV metronidazole is the antibiotic regimen of choice.</li><li>Surgical evacuation of the uterus should be performed immediately upon diagnosis before antibiotic levels have been established.</li><li>Cervical swabs (not vaginal) should be sent for culture and sensitivity.</li><li>Infection confined to the decidua alone represents the mild form and accounts for the majority of cases.</li></ol>
 <button class="reveal" type="button">Show answer</button>
@@ -982,6 +1128,16 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-labour-t1">
     <h3 class="topic-title">Normal Labour — Stages &amp; Mechanism</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Normal labour</b>: spontaneous, singleton, term (37–42 wks), vertex OA, vaginal, 3–18 h, unaugmented, uncomplicated.</li>
+      <li><b>Active phase</b> rate: &ge;1 cm/h nullipara, &ge;1.5 cm/h multipara; prolonged latent phase &gt;20 h (nulli) / &gt;14 h (multi).</li>
+      <li><b>2nd stage limit</b>: &lt;2 h without epidural, &lt;3 h with epidural (nullipara); halve those for multipara.</li>
+      <li><b>3rd stage</b>: 5–30 min with active management; blood loss 150–250 mL — shortest stage.</li>
+      <li><b>Smallest presenting diameter</b>: 9.5 cm suboccipitobregmatic (vertex OA, flexed); brow = 13.5 cm supraoccipitomental — cannot deliver vaginally.</li>
+      <li><b>7 mechanism steps</b>: Engagement → Descent → Flexion → Internal rotation → Extension → Restitution &amp; external rotation → Expulsion.</li>
+      <li><b>Best pain relief in labour</b>: epidural (requires Foley catheter to prevent urinary retention).</li>
+    </ul></div>
+
     <div class="box def"><span class="lbl">Definition</span>
       Onset of <b>regular, involuntary, coordinated, painful uterine contractions</b> associated with <b>cervical effacement and dilatation</b> leading to expulsion of the products of conception.
     </div>
@@ -1016,6 +1172,14 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   ═══════════════════════════════════════════════ -->
   <article class="topic" id="sys-labour-t2">
     <h3 class="topic-title">Abnormal Labour / Failure to Progress</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Failure to progress</b>: MC cause of emergency CS; defined as &lt;1 cm/h (nulli) or &lt;1.5 cm/h (multi) in active phase.</li>
+      <li><b>3 Ps</b>: Power (hypotonic → augment; hypertonic → stop oxytocin), Passage (obstetric conjugate &lt;10 cm = contracted inlet; diagonal conjugate = 12 cm, only one measurable vaginally), Passenger (MC cause = malposition OP, not malpresentation).</li>
+      <li><b>Precipitate labour</b>: delivery &lt;3 h (nulli) / &lt;1 h (multi) → maternal lacerations, PPH, neonatal trauma.</li>
+      <li><b>Shoulder dystocia</b>: anterior shoulder impacted at symphysis; <b>McRoberts manoeuvre first</b> (hyperflexion of thighs + suprapubic pressure); Zavanelli = last resort.</li>
+      <li><b>Obstructed labour signs</b> (BEACH): Bandl's ring ↑, Exhaustion, All-over tachycardia, Caput large, Hard hypertonic contractions → emergency CS or uterine rupture.</li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       <b>Failure to progress (FTP)</b> = most common cause of emergency CS; includes <b>prolonged</b> (&lt;1 cm/h in nullipara, &lt;1.5 cm/h in multipara during active phase), <b>arrested</b> (complete cessation of cervical change or descent), and <b>precipitate</b> labour (delivery within &lt;3 h in nullipara, &lt;1 h in multipara).
@@ -1053,6 +1217,15 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   ═══════════════════════════════════════════════ -->
   <article class="topic" id="sys-labour-t3">
     <h3 class="topic-title">Malpresentation &amp; Malposition</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>MC malpresentation</b>: breech ~4%; within breech, <b>frank breech</b> is MC type; footling = worst (highest cord prolapse + head entrapment risk).</li>
+      <li><b>Face presentation</b>: mentum anterior → VD possible; <b>mentum posterior → CS</b> (cannot extend further); brow = transient, 50–75% convert, persistent → CS.</li>
+      <li><b>ECV</b>: at 36–37 wks, singleton, normal FHR; NOT before 36 wks (preterm fetus reverts); absolute CI = previous CS, placenta praevia, non-reassuring CTG.</li>
+      <li><b>Never use vacuum</b> on face, brow, or breech; <b>Piper forceps</b> for after-coming head in breech.</li>
+      <li><b>Cord prolapse Rx</b>: Trendelenburg/knee-chest, elevate presenting part vaginally, fill bladder with saline → emergency CS; VD only if fully dilated + head engaged.</li>
+      <li><b>Android/anthropoid pelvis</b>: ↑ risk of OP malposition.</li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       <b>Malpresentation</b> = any fetal presentation other than vertex; occurs in 3–7% of deliveries. <b>Malposition</b> = cephalic presentation with occiput NOT anterior (OP or transverse).
@@ -1093,6 +1266,15 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-labour-t4">
     <h3 class="topic-title">Induction of Labour &amp; Prolonged Pregnancy</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>MC indication for IOL</b>: prolonged pregnancy; uncomplicated post-date → deliver at <b>41 weeks</b>.</li>
+      <li><b>Bishop score</b>: &ge;7 = favourable → AROM ± oxytocin; &lt;7 = unfavourable → ripen with PGE2 (pessary 3 mg or gel 0.5 mg) or misoprostol 25 µg vaginally; max 3 doses/24 h.</li>
+      <li><b>Vaginal PG contraindicated</b> with previous CS (uterine rupture risk).</li>
+      <li><b>Oxytocin</b>: start 2 mU/min, double every 30 min; never exceed 32 mU/min (multi) / 64 mU/min (primi); half-life 3–5 min.</li>
+      <li><b>Hyperstimulation</b> (&gt;5 ctx/10 min or &gt;2 min duration) → stop oxytocin, O2, lateral position, IV saline; if persists → terbutaline 0.25 mg IV; still persists → emergency CS.</li>
+      <li><b>Post-term risk trap</b>: RDS is NOT a post-term risk (RDS ↓ as GA ↑); perinatal mortality doubles each week after 42 wks.</li>
+    </ul></div>
+
     <div class="box def"><span class="lbl">Definition</span>
       <b>IOL</b> = artificial initiation of labour prior to spontaneous onset (10–20% of pregnancies). <b>Post-date</b> = &gt;40 completed weeks; <b>post-term</b> = &gt;42 completed weeks; uncomplicated post-date delivery at <b>41 weeks</b>.
     </div>
@@ -1131,6 +1313,23 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-labour-t5">
     <h3 class="topic-title">Operative Vaginal Delivery &amp; Caesarean Section</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>MC overall CS indication</b>: repeated CS (&ge;2); <b>MC primary CS indication</b>: fetal distress.</li>
+      <li><b>OVD prerequisites (both)</b>: fully dilated Cx, engaged head, no CPD, ruptured membranes, empty bladder &amp; rectum, adequate anaesthesia — <b>epidural NOT mandatory</b>.</li>
+      <li><b>Vacuum failure rate 12%</b> vs <b>forceps 7%</b>; vacuum = more fetal complications (cephalohematoma/subgaleal); forceps = more maternal trauma.</li>
+      <li><b>Never vacuum</b>: face, brow, breech, &lt;34 wks; <b>Piper forceps</b> = breech after-coming head; Kielland = rotation + traction; Barton = OT position.</li>
+      <li><b>Classical CS indications</b>: prematurity &lt;28 wks, transverse lie, cervical Ca, dead mother (faster), LUS obstructed by fibroid/malignancy.</li>
+      <li><b>VBAC</b>: 0.5% rupture risk; absolute CI = previous classical CS or previous uterine rupture.</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Feature</th><th>Forceps</th><th>Vacuum</th></tr></thead><tbody>
+      <tr><td><b>Failure rate</b></td><td>7%</td><td><b>12%</b></td></tr>
+      <tr><td><b>MC fetal complication</b></td><td>Facial nerve palsy</td><td>Cephalohematoma / subgaleal</td></tr>
+      <tr><td><b>Maternal trauma</b></td><td><b>More</b></td><td>Less</td></tr>
+      <tr><td><b>Face / brow / breech</b></td><td>Piper (breech); Kielland (rotation)</td><td><b>Never</b></td></tr>
+      <tr><td><b>Preterm &lt;34 wks</b></td><td>Can use</td><td><b>Contraindicated</b></td></tr>
+    </tbody></table>
+    </div>
+
     <div class="box def"><span class="lbl">Definition</span>
       <b>OVD</b> = delivery using forceps or vacuum when maternal expulsive efforts alone are insufficient. <b>CS</b> = delivery via abdominal + uterine incision; most common CS indication overall = <b>repeated CS (≥2)</b>; most common indication for <b>primary</b> CS = <b>fetal distress</b>.
     </div>
@@ -1165,6 +1364,16 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   ═══════════════════════════════════════════════ -->
   <article class="topic" id="sys-labour-t6">
     <h3 class="topic-title">Preterm Labour &amp; PROM</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>PTL diagnosis</b>: regular contractions + Cx dilatation &gt;3 cm / effacement &gt;20% before 37 wks; TVS CL &lt;15 mm confirms; do NOT combine TVS + fFN (same info).</li>
+      <li><b>fFN positive</b>: &gt;50 ng/mL in cervicovaginal swab 20–36 wks → ↑ PTB risk within 7 days; false +(trap): lubricant, recent sex, bleeding, ROM.</li>
+      <li><b>Betamethasone</b> 12 mg IM q24h × 2 doses at 24–34+6 wks for lung maturity; <b>MgSO4</b> 24–29+6 wks for neuroprotection (not tocolysis); antidote = IV calcium gluconate.</li>
+      <li><b>Indomethacin</b>: only &lt;30 wks, max 72 h; fetal risk = premature closure of DA + oligohydramnios.</li>
+      <li><b>PPROM management</b>: corticosteroids + MgSO4 (if &lt;30 wks) + erythromycin 250 mg QID × 10 days; <b>tocolysis NOT recommended in PPROM</b>; deliver at 36–37 wks.</li>
+      <li><b>Chorioamnionitis Dx</b>: maternal temp &gt;38°C + ≥2 of maternal tachy &gt;100, fetal tachy &gt;160, uterine tenderness, ↑CRP, offensive discharge → broad-spectrum Abx + deliver.</li>
+      <li><b>MC RF for PTL</b>: previous preterm delivery (↑ risk 2.5×); cerclage offered if ≥3 prior spontaneous PTBs (placed at 14 wks).</li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       <b>Preterm labour (PTL):</b> regular painful contractions + cervical dilatation &gt;3 cm / effacement &gt;20% before 37 completed weeks after viability. <b>PROM</b> = membrane rupture before labour at ≥37 wks. <b>PPROM</b> = membrane rupture before labour and &lt;37 wks. <b>Prolonged ROM</b> = &gt;18 h before labour.
@@ -1241,6 +1450,24 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-medical-t1">
     <h3 class="topic-title">Hypertensive Disorders / Pre-eclampsia &amp; Eclampsia</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Pre-eclampsia</b>: new HTN (SBP ≥140 or DBP ≥90) after 20 weeks <b>+ proteinuria</b> ≥0.3 g/24 h in previously normotensive woman</li>
+      <li><b>Severe PE</b> cut-offs: BP ≥160/110, proteinuria ≥5 g/24 h, oliguria ≤500 mL/24 h, or CNS/epigastric symptoms → deliver regardless of GA</li>
+      <li><b>MgSO₄</b>: 4 g IV bolus loading dose → 1 g/h for 24 h; antidote = <b>calcium gluconate</b>; earliest toxicity sign = loss of patellar reflex</li>
+      <li>Acute severe HTN: <b>IV labetalol</b> 1st line; IV hydralazine 2nd; <b>ACEIs contraindicated</b>; chronic HTN in pregnancy → <b>methyldopa</b></li>
+      <li><b>HELLP</b> = Haemolysis + AST &gt;72 / LDH &gt;600 + platelets &lt;100 000; transfuse if &lt;20 000 (or &lt;50 000 for CS)</li>
+      <li>Gestational HTN: same BP thresholds, <b>no proteinuria</b>, resolves by 12 weeks postpartum; 30% progress to PE</li>
+      <li>MCQ trap: MgSO₄ continues <b>24 h</b> (not 48 h) after last fit/delivery</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Feature</th><th>Chronic HTN</th><th>Gestational HTN</th><th>Pre-eclampsia</th><th>Severe PE</th></tr></thead><tbody>
+      <tr><td><b>Onset</b></td><td>&lt;20 wks (pre-existing)</td><td>&gt;20 wks</td><td>&gt;20 wks</td><td>&gt;20 wks</td></tr>
+      <tr><td><b>Proteinuria</b></td><td>No</td><td><b>No</b></td><td><b>Yes</b> ≥0.3 g/24 h</td><td>≥5 g/24 h</td></tr>
+      <tr><td><b>BP threshold</b></td><td>≥140/90</td><td>≥140/90</td><td>≥140/90</td><td><b>≥160/110</b></td></tr>
+      <tr><td><b>Resolves postpartum</b></td><td>No</td><td>By 12 wks</td><td>By 12 wks</td><td>By 12 wks</td></tr>
+      <tr><td><b>First-line drug</b></td><td>Methyldopa</td><td>Methyldopa</td><td>Methyldopa</td><td>IV <b>labetalol</b> + MgSO₄</td></tr>
+    </tbody></table>
+    </div>
+
     <div class="box def"><span class="lbl">Definition</span>
       <b>Pre-eclampsia</b>: new-onset sustained hypertension (SBP ≥ 140 <em>or</em> DBP ≥ 90 after 20 weeks) <b>plus</b> new-onset proteinuria (≥ 0.3 g/24 h or +1 dipstick) in a previously normotensive woman. <b>Eclampsia</b>: tonic-clonic seizures in a pre-eclamptic woman not explained by other causes.
     </div>
@@ -1280,6 +1507,25 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════════ -->
   <article class="topic" id="sys-medical-t2">
     <h3 class="topic-title">Diabetes in Pregnancy (GDM &amp; Pre-existing)</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>GDM</b>: glucose intolerance first diagnosed in pregnancy; appears at <b>24–28 weeks</b> due to placental diabetogenic hormones (<b>HPL</b> most important)</li>
+      <li>1-step 75 g OGTT cut-offs (1 of 3 needed): fasting ≥92, 1-h ≥180, 2-h ≥153 mg/dL; glycaemic target fasting &lt;<b>95 mg/dL</b></li>
+      <li>Step-up: <b>diet + exercise → metformin → insulin</b>; switch to insulin if fasting ≥7.0 mmol/L or macrosomia/polyhydramnios</li>
+      <li>Most <b>specific</b> fetal malformation = <b>caudal agenesis</b>; most common CVS malformation = <b>VSD</b></li>
+      <li>Pre-existing DM: <b>folic acid 5 mg</b> from 3 months pre-conception + <b>aspirin 75 mg</b> from 12 weeks; HbA1c &gt;10% → advise against pregnancy</li>
+      <li>MCQ trap: <b>insulin does not cross placenta</b>; macrosomia risk persists even with strict control</li>
+      <li>Post-GDM: <b>75 g OGTT at 6–12 weeks</b> postpartum to screen for type 2 DM</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Feature</th><th>GDM</th><th>Pre-existing DM</th></tr></thead><tbody>
+      <tr><td><b>Onset / timing</b></td><td>First detected at <b>24–28 wks</b></td><td>Before pregnancy or &lt;20 wks</td></tr>
+      <tr><td><b>Cause</b></td><td>Placental HPL → insulin resistance</td><td>Type 1 / Type 2 pre-existing</td></tr>
+      <tr><td><b>Folic acid dose</b></td><td>Standard 400 mcg</td><td><b>5 mg</b> from 3 months pre-conception</td></tr>
+      <tr><td><b>Aspirin</b></td><td><b>75 mg</b> from 12 wks</td><td><b>75 mg</b> from 12 wks</td></tr>
+      <tr><td><b>HbA1c threshold (avoid pregnancy)</b></td><td>N/A</td><td><b>&gt;10%</b> — advise against</td></tr>
+      <tr><td><b>Post-delivery follow-up</b></td><td>75 g OGTT at <b>6–12 wks</b> postpartum</td><td>Continue DM management</td></tr>
+    </tbody></table>
+    </div>
 
     <div class="box def"><span class="lbl">Definition</span>
       <b>GDM</b>: glucose intolerance first recognised during pregnancy (88% of diabetic pregnancies); appears at <b>24–28 weeks</b> due to placental diabetogenic hormones (HPL most important). Pre-existing DM (type 1 or 2) diagnosed before or before 20 weeks by standard criteria.
@@ -1323,6 +1569,22 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-medical-t3">
     <h3 class="topic-title">Anaemia in Pregnancy</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Most common disease in pregnancy</b>; Hb cut-offs: &lt;11 (1st tri), &lt;10.5 (2nd/3rd tri), &lt;10 g/dL (postpartum)</li>
+      <li><b>Iron deficiency</b> = microcytic hypochromic; key lab = <b>ferritin &lt;15 ng/mL</b>; Rx oral iron 100–200 mg elemental/day</li>
+      <li><b>Folate deficiency</b> = macrocytic megaloblastic; buzzword = <b>hypersegmented neutrophils</b>; Rx folic acid 5 mg/day</li>
+      <li><b>Sickle cell</b>: normocytic haemolytic; confirm with Hb electrophoresis; crises mainly in 3rd trimester; avoid pethidine, use <b>morphine</b></li>
+      <li>High-dose <b>folic acid 5 mg</b> for: DM, SCA, thalassaemia, IBD, anti-epileptics; standard dose = <b>400 mcg</b> for all</li>
+      <li><b>ITP</b>: IgG antibodies cross placenta → fetal thrombocytopenia; need platelets ≥50 000 for delivery, ≥75 000 for spinal</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Feature</th><th>Iron Deficiency</th><th>Folate Deficiency</th><th>Sickle Cell</th></tr></thead><tbody>
+      <tr><td><b>Cell type</b></td><td><b>Microcytic</b> hypochromic</td><td><b>Macrocytic</b> megaloblastic</td><td><b>Normocytic</b> haemolytic</td></tr>
+      <tr><td><b>Key lab</b></td><td>Ferritin &lt;15 ng/mL</td><td>Hypersegmented neutrophils</td><td>Hb electrophoresis: HbS</td></tr>
+      <tr><td><b>Fetal risk</b></td><td>IUGR, preterm</td><td><b>Neural tube defects</b>, LBW</td><td>IUGR, fetal loss</td></tr>
+      <tr><td><b>Treatment</b></td><td>Oral iron 100–200 mg/day</td><td>Folic acid <b>5 mg</b>/day</td><td>5 mg folate + morphine for crises</td></tr>
+    </tbody></table>
+    </div>
+
     <div class="box def"><span class="lbl">Definition</span>
       Anaemia is the <b>most common disease in pregnancy</b>. Hb thresholds: &lt; 11 g/dL (1st trimester), &lt; 10.5 g/dL (2nd &amp; 3rd trimester), &lt; 10 g/dL (postpartum). <b>Moderate</b>: Hb 7–9; <b>severe</b>: Hb &lt; 7.
     </div>
@@ -1359,6 +1621,15 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════════ -->
   <article class="topic" id="sys-medical-t4">
     <h3 class="topic-title">VTE in Pregnancy</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Hypercoagulable state</b> up to 12 weeks postpartum; postnatal risk <b>20× higher</b> than non-pregnant; PE = leading cause of pregnancy-related death</li>
+      <li>DVT: <b>90% left-sided</b> (May-Thurner), 70% iliofemoral; 1st-line imaging = <b>compression duplex ultrasound</b></li>
+      <li><b>LMWH</b> = agent of choice (does NOT cross placenta); <b>warfarin</b> causes embryopathy 6–12 weeks — only use for mechanical heart valves</li>
+      <li>Do <b>NOT</b> use <b>D-dimer</b> to exclude VTE in pregnancy (physiologically ↑)</li>
+      <li>Hold LMWH ≥12 h (prophylactic) or ≥24 h (therapeutic) before regional anaesthesia; restart <b>4–6 h</b> post-vaginal delivery, <b>6–12 h</b> post-CS</li>
+      <li>Most common thrombophilia = <b>Factor V Leiden</b>; most potent = <b>antithrombin deficiency</b></li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       Pregnancy is a <b>hypercoagulable state</b> persisting up to 12 weeks postpartum; VTE incidence 1–2 per 1000 pregnancies. Antenatal risk is 5× higher (DVT predominates); postnatal risk is <b>20× higher</b> (PE predominates). PE is a leading cause of pregnancy-related death.
@@ -1397,6 +1668,16 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════════ -->
   <article class="topic" id="sys-medical-t5">
     <h3 class="topic-title">Other Medical Disorders (Thyroid, Cardiac, Renal, Autoimmune)</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Hyperthyroidism</b> (Graves'): 1st trimester → <b>PTU</b>; 2nd–3rd trimester → <b>carbimazole</b>; <b>radioactive iodine absolutely contraindicated</b></li>
+      <li><b>Hypothyroidism</b>: ↑TSH, ↓free T4; treat with <b>levothyroxine</b> (safe in pregnancy)</li>
+      <li><b>SLE</b>: flares ↑ in pregnancy; anti-Ro/La → neonatal lupus + <b>congenital heart block</b> (~5% risk); <b>RA improves</b> 75% in pregnancy, flares postpartum</li>
+      <li><b>APS</b>: ≥3 miscarriages &lt;10 weeks or fetal loss &gt;10 weeks + thrombosis → <b>LMWH + low-dose aspirin</b></li>
+      <li>Asymptomatic bacteriuria: 2–7% pregnant women; untreated → 30–40% develop pyelonephritis; screen at <b>12–16 weeks</b></li>
+      <li>Cholestasis of pregnancy: generalised pruritus, ↑ bile acids, no rash → <b>ursodeoxycholic acid</b>; deliver &lt;38 weeks (IUFD risk)</li>
+      <li>MCQ trap: <b>ACEIs contraindicated</b> in pregnancy (SLE, cardiac, renal); <b>Eisenmenger's = CI to pregnancy</b></li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       Pre-existing or pregnancy-aggravated systemic disease requiring specialised obstetric and medical co-management; all share the principle of multidisciplinary care with increased surveillance.
@@ -1473,6 +1754,24 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   ═══════════════════════════════════════════════════════ -->
   <article class="topic" id="sys-bleeding-t1">
     <h3 class="topic-title">Antepartum Haemorrhage (APH)</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>APH</b> = vaginal bleeding from age of viability to delivery of fetal head; incidence <b>4%</b></li>
+      <li><b>Praevia</b>: painless bleed + soft non-tender uterus + malpresentation → diagnosed by <b>US</b> (95% accurate); PV exam <b>contraindicated</b></li>
+      <li><b>Abruption</b>: painful bleed + tender/woody uterus → <b>clinical</b> diagnosis; normal US does <b>NOT</b> rule it out</li>
+      <li>Key numbers: praevia IUGR <b>15–20%</b>; abruption IUGR <b>80%</b>; abruption recurrence <b>8–17%</b> after 1st, <b>25%</b> after 2nd</li>
+      <li><b>Vasa praevia</b> triad: ROM + painless PV bleed + fetal bradycardia → immediate <b>CS</b></li>
+      <li>Heavy bleed at <b>any GA</b> = emergent CS regardless of grade; give <b>Anti-D</b> if Rh-negative mother</li>
+      <li>MCQ trap: <b>placenta accreta</b> = praevia on prior CS scar → definitive Rx = classical CS + <b>hysterectomy</b></li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Feature</th><th>Placenta Praevia</th><th>Placental Abruption</th></tr></thead><tbody>
+      <tr><td>Pain</td><td><b>Painless</b></td><td><b>Painful</b> (or concealed)</td></tr>
+      <tr><td>Uterus</td><td>Soft, non-tender</td><td><b>Tender / woody</b></td></tr>
+      <tr><td>Malpresentation</td><td><b>Yes</b></td><td>No</td></tr>
+      <tr><td>Diagnosis</td><td><b>Ultrasound</b> (PV exam contraindicated)</td><td><b>Clinical</b> (normal US does NOT exclude)</td></tr>
+      <tr><td>IUGR</td><td>15–20%</td><td><b>80%</b></td></tr>
+    </tbody></table>
+    </div>
 
     <div class="box def">
       <span class="lbl">Definition</span>
@@ -1572,6 +1871,16 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-bleeding-t2">
     <h3 class="topic-title">Postpartum Haemorrhage (PPH)</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Primary PPH</b>: &gt;500 mL after VD or &gt;1000 mL after CS within <b>24 h</b>; secondary = 24 h – 6 wks (usually days <b>6–14</b>)</li>
+      <li><b>Uterine atony</b> = most common cause (<b>80%</b>); boggy uterus on exam is the buzzword</li>
+      <li><b>4 Ts</b>: Tone 80%, Trauma 20%, Tissue 5%, Thrombin (rare alone)</li>
+      <li>Uterotonics in order: <b>Oxytocin</b> (1st, 5 U IV bolus) → <b>Ergometrine</b> (avoid in HTN) → <b>Carboprost</b> PGF2α 250 mcg IM (avoid in <b>asthma</b>) → <b>Misoprostol</b> 1000 mcg rectal</li>
+      <li>Resus: 2 × <b>14G</b> IV; crystalloids 5 L per 1 L loss; PRBCs if &gt;<b>1.5 L</b> loss; 1 U FFP per <b>5 U</b> PRBCs; platelets if &lt;<b>50 ×10⁹/L</b></li>
+      <li><b>Sheehan syndrome</b>: massive haemorrhage → anterior pituitary necrosis → <b>failed lactation</b> (first sign); full picture at 95% gland destruction</li>
+      <li>MCQ trap: uterus <b>not palpable</b> = uterine inversion (not atony) → Johnson method + IV nitroglycerin</li>
+    </ul></div>
+
     <div class="box def">
       <span class="lbl">Definition</span>
       <b>Primary:</b> blood loss &gt;500 mL after vaginal delivery or &gt;1000 mL after CS within 24 h. <b>Secondary:</b> abnormal bleeding 24 h – 6 weeks postpartum (usually days 6–14). Leading cause of maternal mortality worldwide (25% of deaths in developing countries).
@@ -1639,6 +1948,16 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   ═══════════════════════════════════════════════════════ -->
   <article class="topic" id="sys-bleeding-t3">
     <h3 class="topic-title">The Puerperium — Normal &amp; Complications</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Puerperium</b> = 6–8 weeks postpartum; uterus involutes: umbilicus → symphysis at <b>2 wks</b> → 7.5 cm below symphysis at 6 wks; weight 1000 g → <b>70–100 g</b></li>
+      <li>Lochia sequence: <b>rubra → serosa → alba</b> (3–5 wks); offensive lochia = <b>E. coli</b> puerperal sepsis; scanty serous = streptococcal</li>
+      <li>Without BF: ovulation as early as <b>day 27</b>; menses by <b>6–8 wks</b>. With exclusive BF: amenorrhoea ~<b>36 wks</b></li>
+      <li><b>Mastitis</b>: 2–4 wks postpartum, <b>S. aureus</b> → flucloxacillin 7–10 days; BF not contraindicated. Abscess → surgical drainage under GA</li>
+      <li>Puerperal fever: &gt;<b>38°C</b> for &gt;<b>24 h</b> in first 10 days; most common cause = genital tract infection; warfarin <b>not</b> contraindicated in BF</li>
+      <li><b>Postpartum psychosis</b>: onset day <b>4–5</b>; 1:500–1:1000; recurrence <b>20%</b>; life-threatening</li>
+      <li>MCQ trap: <b>methyldopa</b> ↑ risk of PPD; BF contraindicated in <b>HIV</b> and active TB — NOT in CMV, HBV, HCV</li>
+    </ul></div>
 
     <div class="box def">
       <span class="lbl">Definition</span>
@@ -1754,6 +2073,15 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-fetal-t1">
     <h3 class="topic-title">Rh Isoimmunisation</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>IgG anti-D</b> crosses placenta → extravascular haemolysis in Rh+ fetus; IgM (1st pregnancy) does NOT cross</li>
+      <li><b>Indirect Coombs positive</b> = already sensitised → anti-D useless; monitor with MCA-PSV instead</li>
+      <li>Dose rule: <b>250 IU &lt;20 wks; 500 IU ≥20 wks</b> (+ 100 IU/ml fetal blood on Kleihauer); within <b>72 h</b></li>
+      <li><b>MCA-PSV &gt;1.5× median</b> = fetal anaemia; critical anti-D titer = <b>8–32</b></li>
+      <li>Severe anaemia: &gt;34 wks → deliver; &lt;34 wks → <b>IUT</b> (umbilical vein, Rh-neg irradiated blood)</li>
+      <li>Trap: <b>NO anti-D</b> for complete spontaneous miscarriage &lt;12 wks; ABO incompatibility is <b>protective</b></li>
+    </ul></div>
+
     <div class="box def"><span class="lbl">Definition</span>
       Sensitisation of an Rh-negative mother to Rh(D) antigen via fetomaternal haemorrhage (FMH), leading to <b>IgG anti-D</b> that crosses the placenta and causes extravascular haemolytic anaemia in a subsequent Rh-positive fetus.
     </div>
@@ -1795,6 +2123,23 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-fetal-t2">
     <h3 class="topic-title">Fetal Growth — IUGR/SGA &amp; Macrosomia</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>SGA</b> = birth weight &lt;10th centile; <b>IUGR</b> = failure to reach growth potential (20% of SGA)</li>
+      <li>Asymmetrical IUGR: <b>80%</b>, late-onset, <b>head-sparing</b>, good prognosis → placental insufficiency/PET</li>
+      <li>Symmetrical IUGR: 20%, early-onset, no head-sparing, bad prognosis → chromosomal/TORCH</li>
+      <li><b>AC</b> (abdominal circumference) = single best US predictor of fetal weight</li>
+      <li>Oligohydramnios (AFI ≤5 cm): MC cause = <b>PROM</b>; also post-term, renal agenesis, PET</li>
+      <li>Polyhydramnios (AFI ≥25 cm): MC cause = <b>idiopathic</b>; then DM, oesophageal atresia, anencephaly</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Feature</th><th>Symmetrical IUGR</th><th>Asymmetrical IUGR</th></tr></thead><tbody>
+      <tr><td>Proportion</td><td>20%</td><td><b>80%</b></td></tr>
+      <tr><td>Onset</td><td>Early (1st trimester)</td><td>Late (2nd–3rd trimester)</td></tr>
+      <tr><td>Head sparing</td><td><b>No</b> — all organs small</td><td><b>Yes</b> — abdomen most affected</td></tr>
+      <tr><td>Causes</td><td>Chromosomal / TORCH</td><td>Placental insufficiency / PET</td></tr>
+      <tr><td>Prognosis</td><td><b>Bad</b></td><td><b>Good</b></td></tr>
+    </tbody></table>
+    </div>
+
     <div class="box def"><span class="lbl">Definition</span>
       <b>SGA</b>: birth weight &lt;10th centile (incidence 5–10%). <b>IUGR</b> = failure to achieve growth potential (20% of SGA); 70% of SGA are constitutionally small, 10% premature. <b>LGA/macrosomia</b>: fundal height &gt;3 cm above gestational age.
     </div>
@@ -1828,6 +2173,22 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════ -->
   <article class="topic" id="sys-fetal-t3">
     <h3 class="topic-title">Multiple Gestation</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li>Chorionicity determined <b>&lt;14 wks</b> (100% accurate); monochorionicity = highest risk</li>
+      <li>Split day 1–3 → <b>DCDA</b>; days 4–8 → <b>MCDA</b> (MC monozygotic, 70%); days 8–13 → MCMA; &gt;13 → conjoined</li>
+      <li>US sign: <b>lambda (λ) = dichorionic</b>; <b>T-sign = monochorionic</b></li>
+      <li>Delivery: DCDA <b>37+0</b> wks; MCDA <b>36+0</b> wks; MCMA <b>32+0–33+6</b> wks (CS)</li>
+      <li><b>TTTS</b>: complicates 15% of MCDA; donor = dry (oligo, no bladder, IUGR); recipient = drowning (polyhydramnios, distended bladder, hydrops)</li>
+      <li>TTTS tx: <b>fetoscopic laser</b> (stage ≥2, &lt;26 wks; survival 85%); mode of twin delivery determined by <b>presentation of lower twin</b></li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Type</th><th>Split day</th><th>US sign</th><th>Delivery</th></tr></thead><tbody>
+      <tr><td><b>DCDA</b></td><td>1–3</td><td><b>&lambda; (lambda)</b> sign</td><td><b>37+0 wks</b></td></tr>
+      <tr><td><b>MCDA</b></td><td>4–8 (70%)</td><td><b>T-sign</b></td><td><b>36+0 wks</b></td></tr>
+      <tr><td><b>MCMA</b></td><td>8–13</td><td>T-sign, no membrane</td><td><b>32+0–33+6 wks (CS)</b></td></tr>
+      <tr><td>Conjoined</td><td>&gt;13</td><td>—</td><td>CS</td></tr>
+    </tbody></table>
+    </div>
 
     <div class="box def"><span class="lbl">Definition</span>
       Twin perinatal mortality <b>3× singleton</b>; mainly driven by prematurity. Chorionicity — determined before 14 wks (100% accuracy) — is the single most important factor governing outcome; all risks are increased with <b>monochorionicity</b>.
@@ -1871,6 +2232,15 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-fetal-t4">
     <h3 class="topic-title">Fetal Anomalies &amp; Screening</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li>Major congenital anomalies in <b>2–3%</b> of live births; MC aetiology = <b>unknown (60%)</b>, then multifactorial (20%)</li>
+      <li>Down syndrome: ↑ <b>βHCG + inhibin-A</b>; ↓ <b>PAPP-A + AFP</b>; US = ↑NT + absent nasal bone</li>
+      <li>Open NTD: ↑ <b>MSAFP</b> → US first (exclude dates/multiples) → amniocentesis for AF-AFP + <b>AChE</b> (confirms open defect)</li>
+      <li>Trap: <b>Down syndrome = ↓AFP</b> (not ↑); AChE absent in closed NTD</li>
+      <li><b>Gastroschisis</b> = no peritoneal covering; <b>omphalocele</b> = covered, protrudes into cord (associated with chromosomal anomaly)</li>
+      <li>Symmetrical IUGR + anomalies → suspect <b>chromosomal/TORCH</b></li>
+    </ul></div>
+
     <div class="box def"><span class="lbl">Definition</span>
       Major congenital abnormality in <b>2–3%</b> of live births; minor in 15%. Aetiology: unknown 60%, multifactorial 20%, single-gene 7.5%, chromosomal 6%, infections 2–3%.
     </div>
@@ -1905,6 +2275,15 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════ -->
   <article class="topic" id="sys-fetal-t5">
     <h3 class="topic-title">Miscellaneous — High-Yield Items</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Epidural</b> = best labour analgesia; space L2–L3 or L3–L4; no direct fetal effect; does NOT cross placenta</li>
+      <li><b>Spinal</b> = technique of choice for elective CS; subarachnoid space L3–L4 or L4–L5; onset ~5 min</li>
+      <li>Epidural absolute contraindications: <b>coagulopathy, therapeutic anticoagulation, sepsis, hypovolaemia, ↑ICP, platelets &lt;80,000</b></li>
+      <li><b>Pethidine</b> = MC parenteral opioid in labour; crosses placenta → neonatal respiratory depression; antidote = <b>naloxone</b></li>
+      <li>Massive transfusion metabolic trap: <b>↓Ca²⁺</b> (citrate toxicity), ↑K⁺, coagulopathy, hypothermia</li>
+      <li>Never perform VE if <b>placenta praevia suspected</b></li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       High-yield obstetric topics: labour analgesia/anaesthesia options and abdominal pain differential in pregnancy.
@@ -2010,6 +2389,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
 
 </section>
 <div class="part-banner gy" id="part-gyn"><span class="part-kicker">Part 2 &middot; Session B</span><h2>Gynaecology</h2><p>The cycle, benign disease, fertility, urogynaecology &amp; oncology.</p></div>
+<div class="mode-picker"><div class="mp-btns"><button class="mp-btn" data-mode="compact">&#9889; Compact mode</button><button class="mp-btn" data-mode="full">&#128214; Full mode</button></div><div class="mp-note"><b>Compact</b> &mdash; all you need to know for the exam. <b>Full</b> &mdash; if you need more detail to understand something.</div></div>
 <section class="system gy" id="sys-menstrual" data-system="Menstrual Cycle &amp; Disorders">
 <h2 class="sys-title">1. Menstrual Cycle &amp; Disorders</h2>
 <p class="sys-intro">the normal cycle and the common disorders of menstruation</p>
@@ -2017,6 +2397,16 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════ TOPIC 1 ═══════════════════════════════ -->
   <article class="topic" id="sys-menstrual-t1">
     <h3 class="topic-title">The Menstrual Cycle (Physiology)</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Luteal phase</b>: always fixed at <b>14 days</b>; follicular phase is variable → day of ovulation = cycle length − 14.</li>
+      <li><b>LH surge</b> → ovulation <b>24–36 h</b> later; progesterone &gt;5 ng/dL on <b>day 21</b> confirms ovulation.</li>
+      <li><b>GnRH</b> half-life ≈ 1 min → <b>cannot be measured</b> in labs; FSH/LH are stable glycoproteins, measured on <b>day 2–5</b>.</li>
+      <li><b>FSH</b> → granulosa cells → aromatase converts androstenedione → <b>estradiol</b>; <b>LH</b> → theca cells → progesterone/androstenedione.</li>
+      <li>Estrogen peak → <b>positive feedback</b> → LH surge (one mechanism that is positive, everything else is negative).</li>
+      <li><b>Corpus luteum</b> maintained by <b>HCG</b> in pregnancy until placenta takes over at ~3 months.</li>
+      <li>Each cycle ~1000 follicles enlarge; only <b>1 dominant (20 mm)</b> survives; rest undergo atresia.</li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       A hormone-driven 21–35 day cycle that prepares the endometrium for implantation; controlled by the hypothalamo-pituitary-ovarian (HPO) axis.
@@ -2058,6 +2448,16 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════ TOPIC 2 ═══════════════════════════════ -->
   <article class="topic" id="sys-menstrual-t2">
     <h3 class="topic-title">Menorrhagia / Abnormal Uterine Bleeding (PALM-COEIN)</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Menorrhagia</b>: objectively ≥ <b>80 mL</b>/cycle (normal 30–80 mL); subjectively heavy, prolonged, <em>regular</em> bleeding.</li>
+      <li><b>Von Willebrand disease</b>: MC inherited bleeding disorder → menorrhagia in <b>teenagers</b> (PALM-COEIN "C").</li>
+      <li><b>Mirena IUS</b> (levonorgestrel 20 µg/day) → ↓MBL by <b>80–90%</b> → <b>1st-line</b>; not suitable if <b>submucosal</b> fibroid (distorted cavity).</li>
+      <li><b>Tranexamic acid</b>: antifibrinolytic; preferred when bleeding disorder coexists. <b>Mefenamic acid</b> (NSAID): preferred when <b>dysmenorrhoea</b> coexists, ↓MBL 25–50%.</li>
+      <li><b>Endometrial biopsy</b>: mandatory if ≥ <b>45 yrs</b>, or &lt;45 with PCOS/obesity/tamoxifen/unopposed oestrogen.</li>
+      <li>Post-menopausal bleeding + TVS endometrial thickness ≥ <b>4 mm</b> → biopsy; atypical hyperplasia carries <b>43%</b> risk of concurrent cancer.</li>
+      <li><b>D&amp;C trap</b>: excessive dilatation → <b>cervical incompetence</b>; excessive curettage → <b>Asherman's syndrome</b>.</li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       <b>Menorrhagia</b>: objectively ≥ <b>80 mL</b> menstrual blood loss per cycle (normal 30–80 mL); subjectively heavy, prolonged, regular bleeding that impairs quality of life.
@@ -2104,6 +2504,23 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════ TOPIC 3 ═══════════════════════════════ -->
   <article class="topic" id="sys-menstrual-t3">
     <h3 class="topic-title">Amenorrhoea (Primary vs Secondary)</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Primary amenorrhoea</b>: no menarche by <b>14</b> (no 2° sex chars) or by <b>16</b> (with 2° sex chars). Always exclude pregnancy in secondary.</li>
+      <li><b>Turner syndrome</b> (45 XO): MC cause of 1° amenorrhoea; ↑FSH/LH; <b>no pregnancy possible</b>; Rx: HRT.</li>
+      <li><b>AIS vs MRKSH</b>: both have absent uterus. AIS = <b>46 XY</b> + absent sexual hair; MRKSH = <b>46 XX</b> + normal hair. Discriminator: karyotype + pubic/axillary hair.</li>
+      <li><b>Kallmann</b>: GnRH deficiency + <b>anosmia</b> → ↓FSH/LH (hypogonadotropic); pregnancy possible.</li>
+      <li><b>Investigation ladder</b> (2° amenorrhoea): <b>B-HCG → prolactin + TFT → progesterone withdrawal → FSH/LH</b>.</li>
+      <li><b>Progesterone withdrawal — no bleed</b> → outflow obstruction (Asherman's) or ↓oestrogen; <b>bleed</b> → axis intact, check FSH/LH.</li>
+      <li>FSH/LH pattern: <b>↓</b> = hypogonadotropic (hypothalamic/pituitary); <b>↑</b> = hypergonadotropic (ovarian failure/Turner); <b>normal</b> = eugonadotropic (PCOS, outflow).</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Feature</th><th><b>AIS</b> (testicular feminisation)</th><th><b>MRKSH</b> (Müllerian agenesis)</th></tr></thead><tbody>
+      <tr><td>Karyotype</td><td><b>46 XY</b></td><td><b>46 XX</b></td></tr>
+      <tr><td>Pubic / axillary hair</td><td><b>Absent</b></td><td>Normal</td></tr>
+      <tr><td>Uterus</td><td>Absent</td><td>Absent</td></tr>
+      <tr><td>Gonads</td><td>Testes (intra-abdominal)</td><td>Normal ovaries</td></tr>
+      <tr><td>Management</td><td>Gonadectomy after puberty + HRT</td><td>Vaginal dilators; no hormones</td></tr>
+    </tbody></table></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       <b>Primary</b>: no menarche by age 14 (no 2° sex characteristics) or by age <b>16</b> (with 2° sex characteristics). <b>Secondary</b>: absence of menses &gt;3 months (regular cycles) or &gt;6 months (irregular cycles) — always exclude pregnancy first.
@@ -2239,6 +2656,16 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-benign-t1">
     <h3 class="topic-title">Uterine Fibroids</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Leiomyoma</b>: monoclonal benign smooth-muscle tumour of myometrium; most common benign uterine tumour (77% of hysterectomy specimens).</li>
+      <li><b>Submucous</b> → menorrhagia + recurrent pregnancy loss (distorts cavity); <b>subserous</b> → pressure/urinary symptoms, no effect on menses; <b>intramural</b> → usually asymptomatic.</li>
+      <li>Most important growth driver = <b>progesterone</b> (highest mitotic count when progesterone ↑); GnRH agonists → ↓ fibroid volume 30%, uterine volume 35% over 6 months.</li>
+      <li><b>Red (carneous) degeneration</b>: 2nd half of pregnancy/puerperium → pain + fever + tender fibroid; treat conservatively — <b>never remove during pregnancy</b>.</li>
+      <li>Commonest degeneration overall = <b>hyaline</b> (central, least-vascular part).</li>
+      <li>Rapid growth <b>after menopause</b> → suspect leiomyosarcoma (&lt;1%).</li>
+      <li>Full-thickness myomectomy = indication for <b>CS in future pregnancy</b>; UAE gives 75–80% satisfaction for menorrhagia.</li>
+    </ul></div>
+
     <div class="box def"><span class="lbl">Definition</span>
       Monoclonal benign <b>smooth muscle tumour</b> (leiomyoma) arising from the myometrium; most common benign uterine tumour, found in 77% of hysterectomy specimens.
     </div>
@@ -2277,6 +2704,22 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════════ TOPIC 2 -->
   <article class="topic" id="sys-benign-t2">
     <h3 class="topic-title">Endometriosis &amp; Adenomyosis</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Endometriosis</b>: endometrial glands + stroma <b>outside</b> the uterus; most common site = <b>ovary</b>.</li>
+      <li>Classic triad: <b>secondary dysmenorrhoea</b> (starts before menses), <b>deep dyspareunia</b>, chronic pelvic pain — the &ldquo;3 Ds&rdquo;.</li>
+      <li><b>Gold standard Dx = laparoscopy</b> + biopsy (powder-burn/gunshot lesions); chocolate cyst USS = ground-glass appearance.</li>
+      <li>Pain does <b>not correlate</b> with disease stage; Stage IV can be nearly asymptomatic. Stage III score 16–40 (endometriomas present); Stage IV score &gt;40 (endometriomas &gt;2 cm).</li>
+      <li>Medical ladder: NSAIDs → COCs → progestins/Mirena → <b>GnRH agonists</b> (→ hypoestrogenism after 6 months) → aromatase inhibitors (give with <b>Ca/Vit D</b>).</li>
+      <li><b>Danazol</b> = synthetic derivative of ethinyl testosterone; anti-estrogenic + mildly anabolic; S/Es = weight gain, hirsutism, voice change.</li>
+      <li>Endometrioma surgical cut-off: &lt;3 cm → fenestration + drainage; <b>&gt;3 cm → cystectomy</b>.</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Feature</th><th><b>Endometriosis</b></th><th><b>Adenomyosis</b></th></tr></thead><tbody>
+      <tr><td>Tissue location</td><td>Outside uterus (ovary, POD)</td><td>Within myometrium</td></tr>
+      <tr><td>Uterus on exam</td><td>Fixed, retroverted, <b>tender</b></td><td>Symmetrically enlarged, <b>boggy</b></td></tr>
+      <tr><td>Hallmark symptom</td><td><b>Deep dyspareunia</b> + 3 Ds</td><td><b>Menorrhagia</b> + 2° dysmenorrhoea</td></tr>
+      <tr><td>Gold standard Dx</td><td><b>Laparoscopy</b> + biopsy</td><td>Histology post-hysterectomy</td></tr>
+    </tbody></table></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       <b>Endometriosis</b>: presence of endometrial glands <em>and</em> stroma <b>outside the uterus</b>, responding cyclically to hormones; chiefly a reproductive-age disease. Most common site = <b>ovary</b>.
@@ -2317,6 +2760,23 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- ═══════════════════════════════════════════════════ TOPIC 3 -->
   <article class="topic" id="sys-benign-t3">
     <h3 class="topic-title">Vaginal Discharge &amp; Pelvic Inflammatory Disease</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>BV</b> (Gardnerella): MC cause of discharge; grey homogeneous fishy discharge; pH &gt;4.5; <b>clue cells</b> on wet prep; positive <b>whiff test</b>; Rx = metronidazole 400 mg BD ×5–7 days or 2 g stat.</li>
+      <li><b>Candida</b>: curdy white discharge + prominent itch; <b>normal pH</b>; pseudohyphae on <b>KOH prep</b> (100% specific); Rx = fluconazole 150 mg stat (avoid oral in pregnancy → miconazole 3-day vaginal ovules); recurrent = ≥4 episodes/year.</li>
+      <li><b>Trichomonas</b>: copious yellow-green <b>frothy</b> discharge; pH &gt;4.5; motile flagellated organisms on saline wet-mount; <b>strawberry cervix</b> (2%, pathognomonic); exclusively STI → treat partner; Rx = <b>metronidazole 2 g stat</b>.</li>
+      <li><b>PID</b>: Chlamydia + Gonorrhoea (polymicrobial); <b>bilateral</b> cervical excitation tenderness + negative β-hCG (vs unilateral in ectopic).</li>
+      <li>PID Rx: IV antibiotics until afebrile ×24 h → oral for <b>14 days total</b>; diagnose clinically — laparoscopy not routine.</li>
+      <li><b>Fitz-Hugh-Curtis</b>: peri-hepatic adhesions → RUQ pain; 10% of gonorrhoea/chlamydia PID.</li>
+      <li>PID sequelae: <b>ectopic pregnancy</b>, infertility, chronic pelvic pain, hydrosalpinx, TOA (ruptured TOA mortality 5–10%).</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Feature</th><th><b>BV</b></th><th><b>Candida</b></th><th><b>Trichomonas</b></th></tr></thead><tbody>
+      <tr><td>Discharge</td><td>Grey, homogeneous, <b>fishy</b></td><td><b>Curdy white</b>, no odour</td><td>Copious, <b>frothy</b>, yellow-green</td></tr>
+      <tr><td>pH</td><td><b>&gt;4.5</b></td><td><b>Normal</b></td><td><b>&gt;4.5</b></td></tr>
+      <tr><td>Microscopy</td><td><b>Clue cells</b> (wet prep)</td><td>Pseudohyphae (<b>KOH</b>)</td><td><b>Motile flagellates</b> (saline)</td></tr>
+      <tr><td>Pathognomonic</td><td>Whiff test +ve</td><td>—</td><td><b>Strawberry cervix</b></td></tr>
+      <tr><td>Treatment</td><td>Metronidazole 400 mg BD ×5–7 d</td><td>Fluconazole 150 mg stat</td><td><b>Metronidazole 2 g stat + treat partner</b></td></tr>
+    </tbody></table></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       <b>PID</b>: infection of the upper genital tract (cervix and above), almost always sexually transmitted; caused chiefly by <b>Chlamydia trachomatis</b> and <b>Neisseria gonorrhoeae</b>, but may be polymicrobial.
@@ -2427,6 +2887,24 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-fertility-t1">
     <h3 class="topic-title">Contraception</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Pearl index</b> = unintended pregnancies per 100 women-years; ↓ = more effective.</li>
+      <li>Most effective methods: <b>LNG-IUS</b> 0.09%/yr &gt; <b>implant</b> 0.1%/yr &gt; <b>DMPA</b> &lt;0.3%/yr &gt; <b>copper IUD</b> 1.26%/yr &gt; COCP ~1–2%/yr.</li>
+      <li><b>COCP</b>: stop <b>4 weeks before major surgery</b> (VTE risk ↑ 3–4×); non-contraceptive benefits = ↓ dysmenorrhoea, menorrhagia, ovarian/endometrial CA, PCOS acne.</li>
+      <li><b>DMPA unique indications</b>: sickle-cell disease, seizures, endometriosis, enzyme-inducing drugs; trap = ↓ BMD + <b>delayed fertility return 9–12 months</b>.</li>
+      <li><b>Major S/E of implant/DMPA/Mirena</b> = irregular bleeding (vaginal spotting); implant has <b>NO VTE risk, NO BMD effect</b> — distinguishes it from DMPA.</li>
+      <li><b>Best EC</b>: copper IUD within <b>5 days</b>, 99% efficacy; LNG (Levonelle) within <b>3 days</b> 85%; UPSA (ellaOne) within <b>5 days</b> 96%, NOT &gt;once/cycle.</li>
+      <li><b>LAM</b> &gt;98% only if all 3 met: exclusive breastfeeding + amenorrhoeic + &lt;6 months postpartum — fails if any one absent.</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Method</th><th>Mechanism</th><th><b>Key CI / caution</b></th><th>Distinguishing note</th></tr></thead><tbody>
+      <tr><td><b>COCP</b></td><td>↓ ovulation (E + P); ↑ cervical mucus</td><td><b>VTE/arterial history; breast CA; migraine + aura</b></td><td>Stop <b>4 wk before major surgery</b>; ↑ VTE 3–4×; non-contraceptive benefits</td></tr>
+      <tr><td><b>POP</b> (minipill)</td><td>↑ cervical mucus (± ↓ ovulation)</td><td>Current breast CA</td><td>Safe breastfeeding/postpartum; <b>3-hr window</b>; no VTE risk</td></tr>
+      <tr><td><b>DMPA</b> (Depo)</td><td>↓ ovulation (progestogen)</td><td>Wanting pregnancy within <b>1–2 yr</b>; ↓ BMD concerns</td><td><b>Fertility return delayed 9–12 months</b>; ↓ BMD; unique: sickle-cell, seizures</td></tr>
+      <tr><td><b>Implant</b> (Nexplanon)</td><td>↓ ovulation (etonogestrel)</td><td>Current breast CA</td><td><b>No VTE, no BMD effect</b> — distinguishes from DMPA; irregular bleeding main SE</td></tr>
+      <tr><td><b>LNG-IUS</b> (Mirena)</td><td>Local P → endometrial atrophy + ↑ cervical mucus</td><td>Unexplained uterine bleeding; uterine distortion</td><td>Lowest failure rate <b>0.09%/yr</b>; ↓ menorrhagia 74–97%</td></tr>
+      <tr><td><b>Copper IUD</b></td><td>Toxic to sperm; ↑ phagocytosis</td><td>Wilson's disease; uterine distortion</td><td>Non-hormonal; best EC within <b>5 days</b> (99%); ↑ menorrhagia</td></tr>
+    </tbody></table></div>
+
     <div class="box def"><span class="lbl">Definition</span>
       <b>Pearl index</b>: number of unintended pregnancies per 100 women using a method for 1 year; lower = more effective.
     </div>
@@ -2518,13 +2996,23 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
         <li>COCP non-contraceptive benefits: ↓ dysmenorrhoea, menorrhagia, acne/hirsutism (PCOS), endometriosis; ↓ ovarian, endometrial, colorectal CA.</li>
       </ul>
     </div>
-  
+
     <div class="mnem"><b>Mnemonic:</b> COCP absolute contraindications &mdash; &ldquo;<b>BLAB-VP</b>&rdquo;: <b>B</b>reast cancer (or estrogen-dependent malignancy), <b>L</b>iver disease (active), <b>A</b>rterial thromboembolic disease history (MI / stroke), <b>B</b>lood clot / VTE history, <b>V</b>aginal bleeding (unexplained), <b>P</b>regnancy. And remember <b>LAM</b> works &gt;98% only if all 3 hold: <b>L</b>actating exclusively, <b>A</b>menorrhoeic, &lt;6 <b>M</b>onths postpartum.</div>
 </article>
 
   <!-- ═══════════════════════════════════════════════════════ -->
   <article class="topic" id="sys-fertility-t2">
     <h3 class="topic-title">Infertility</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Infertility</b> = failure to conceive after <b>1 year</b> of unprotected sex; evaluate after <b>6 months</b> if female ≥35 yr.</li>
+      <li><b>First investigation = semen analysis</b> (before any expensive/invasive female test); confirm with ≥2 samples 2–7 days abstinence apart.</li>
+      <li>WHO 2010 semen cut-offs: concentration <b>&gt;15 mil/ml</b>, total motility <b>&gt;40%</b>, progressive motility <b>&gt;32%</b>, morphology <b>&gt;4%</b>, volume ≥1.5 ml.</li>
+      <li><b>Day-21 progesterone &gt;4 ng/ml</b> = retrospective ovulation; <b>LH surge</b> = prospective (ovulation ~36 hr after surge start).</li>
+      <li><b>HSG</b> diagnoses tubal patency + uterine cavity but <b>cannot</b> differentiate bicornuate vs septate — needs <b>laparoscopy</b>.</li>
+      <li><b>Hyperprolactinaemia</b>: treat with <b>bromocriptine first</b> before ovulation induction (prolactin inhibits pulsatile GnRH).</li>
+      <li><b>IVF</b>: first-line for bilateral tubal block; embryo transfer best on <b>day 5</b> (blastocyst); age &lt;35 → 2 embryos, age &gt;35 → 3 embryos.</li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       Failure to conceive after <b>1 year of unprotected intercourse</b> (evaluate after <b>6 months</b> if female ≥35 yr); affects ~10–15% of couples; monthly fecundability ~20–25%.
@@ -2596,7 +3084,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
         <li><b>ICSI</b>: indicated when sperm cannot penetrate egg naturally (very low count/motility) or normal IVF fertilisation fails — single sperm injected directly into oocyte cytoplasm.</li>
       </ul>
     </div>
-  
+
     <div class="mnem"><b>Mnemonic:</b> Investigate infertility with &ldquo;<b>SALT</b>&rdquo; &mdash; <b>S</b>emen analysis first (before any invasive female test), <b>A</b>ssess ovulation (day-21 progesterone &gt;4 ng/ml = retrospective; LH surge = prospective), <b>L</b>aparoscopy / HSG for tubal patency (HSG cannot differentiate bicornuate vs septate &mdash; laparoscopy can), <b>T</b>reat according to cause (Clomiphene for anovulation; IVF for bilateral tubal block / severe endo / male factor).</div>
 </article>
 
@@ -2639,6 +3127,16 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-menopause-t1">
     <h3 class="topic-title">Menopause</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Diagnosis</b>: retrospective — <b>12 consecutive months amenorrhea</b>, no other cause; avg age <b>51</b> (range 45–55).</li>
+      <li><b>Pathological</b> if &lt;40 y → label as <b>POI</b>; requires FSH &gt;40 mIU/mL on <b>2 tests 1 month apart</b> + low estradiol.</li>
+      <li><b>MC symptom</b>: hot flushes (85%); caused by ↓E → hypothalamic instability; each episode lasts <b>2–5 min</b>.</li>
+      <li><b>Vaginal atrophy</b>: ↓E → thin pale epithelium, ↑pH (alkaline) → ↑UTI risk; first-line = <b>local estrogen</b>.</li>
+      <li><b>Obese women</b>: <b>fewer</b> vasomotor symptoms (peripheral estrone production) — classic MCQ trap.</li>
+      <li><b>Osteoporosis</b>: BMD ≥2.5 SD below young-adult mean; screen with <b>DEXA</b>; 1st-line Rx = <b>bisphosphonates</b>.</li>
+      <li><b>Smoking</b> → <b>earlier</b> menopause (40–45 y) — NOT later; classic MCQ except trap.</li>
+    </ul></div>
+
     <div class="box def"><span class="lbl">Definition</span> Permanent cessation of menstruation due to loss of ovarian follicular activity, diagnosed retrospectively after <b>12 consecutive months of amenorrhea</b> without other cause; average age <b>51</b> (normal range 45–55); pathological if &lt;40 y.</div>
 
     <table class="cmp">
@@ -2666,12 +3164,30 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
     </div>
 
     <div class="box flag"><span class="lbl">Red flags</span> Loss of height &gt;1.5 inches (vertebral fracture); postmenopausal bleeding (investigate endometrium — TVUS &gt;4–5 mm suspicious); FSH &gt;40 mIU/mL &lt;40 y on two tests 1 month apart = POI.</div>
-  
+
     <div class="mnem"><b>Mnemonic:</b> Menopausal symptoms &mdash; &ldquo;<b>VAMPS</b>&rdquo;: <b>V</b>asomotor (hot flushes, night sweats &mdash; hypothalamic instability from E deficiency), <b>A</b>trophy &mdash; urogenital (vaginal dryness, dyspareunia, recurrent UTIs), <b>M</b>ood &amp; cognition (depression, anxiety, poor memory), <b>P</b>sychological &amp; sleep (insomnia, low libido), <b>S</b>keletal &amp; skin (osteoporosis, joint pain, collagen loss, wrinkling).</div>
 </article>
 
   <article class="topic" id="sys-menopause-t2">
     <h3 class="topic-title">Hormone Replacement Therapy (HRT)</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Intact uterus</b> → must add <b>progestogen</b> (protects endometrium); <b>hysterectomised</b> → estrogen-only.</li>
+      <li><b>Transdermal preferred</b> when: VTE history, BMI &gt;30, uncontrolled HTN, migraine with aura, on carbamazepine — avoids first-pass, <b>no VTE or HTN risk</b>.</li>
+      <li><b>Absolute CIs</b> (BLUVP): <b>B</b>reast/estrogen-dependent cancer, <b>L</b>iver disease (active), <b>U</b>nexplained vaginal bleeding, <b>V</b>TE (active or historical), <b>P</b>regnancy.</li>
+      <li><b>Endometrial threshold</b>: TVUS &gt;4–5 mm postmenopause = suspicious → <b>endometrial biopsy</b> (gold standard).</li>
+      <li><b>Raloxifene</b> (SERM): ↓vertebral fracture 50%, ↓LDL; does <b>NOT</b> raise TGs; CI in VTE; SE = hot flushes — MCQ trap (oral estrogen raises TGs, raloxifene does not).</li>
+      <li><b>Tibolone</b>: weak E + P + androgen; ↑libido; ↑<b>endometrial cancer</b> risk.</li>
+      <li><b>Spotting in first 3–6 months</b> on continuous combined HRT = normal; persistent &gt;6 months → investigate.</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Woman</th><th>HRT choice</th><th><b>Key reason</b></th></tr></thead><tbody>
+      <tr><td>Intact uterus, no VTE risk</td><td>Oral combined (E + progestogen)</td><td><b>Progestogen essential</b> — protects endometrium</td></tr>
+      <tr><td>Post-hysterectomy</td><td>Estrogen-only (oral or transdermal)</td><td>No endometrium → progestogen unnecessary</td></tr>
+      <tr><td>VTE history / BMI &gt;30 / migraine + aura / uncontrolled HTN</td><td><b>Transdermal</b> E ± progestogen</td><td>Avoids first-pass; <b>no VTE or HTN risk</b></td></tr>
+      <tr><td>Intact uterus + transdermal E</td><td>Add oral/transdermal progestogen <em>or</em> LNG-IUS</td><td>Progestogen still needed even via transdermal route</td></tr>
+      <tr><td>Libido concerns ± menopause sx</td><td>Tibolone</td><td>Weak E + P + androgen; ↑ libido; <b>↑ endometrial CA risk</b></td></tr>
+      <tr><td>Osteoporosis, no uterine/breast CA</td><td>Raloxifene (SERM)</td><td>↓ vertebral fracture 50%; does <b>NOT</b> raise TGs; CI in VTE</td></tr>
+    </tbody></table></div>
 
     <div class="box def"><span class="lbl">Definition</span> Exogenous estrogen ± progestogen to relieve menopausal symptoms; <b>only 20–30%</b> of menopausal women need HRT — the majority remain healthy with lifestyle measures alone.</div>
 
@@ -2702,7 +3218,7 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
     </div>
 
     <div class="box flag"><span class="lbl">Red flags</span> Persistent postmenopausal bleeding on HRT after 6 months → investigate structurally; consider secondary care referral. Unexplained vaginal bleeding before starting HRT → ultrasound or hysteroscopy first. Age &gt;45: no FSH needed to diagnose menopause.</div>
-  
+
     <div class="mnem"><b>Mnemonic:</b> HRT absolute contraindications &mdash; &ldquo;<b>BLUVP</b>&rdquo;: <b>B</b>reast cancer (or estrogen-dependent malignancy), <b>L</b>iver disease (active), <b>U</b>nexplained vaginal bleeding, <b>V</b>TE &mdash; active or historical, <b>P</b>regnancy. Use <b>transdermal</b> (not oral) when VTE risk, BMI &gt;30, migraine with aura, or HTN &mdash; no first-pass, no VTE/HTN risk.</div>
 </article>
 
@@ -2743,6 +3259,23 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-urogyn-t1">
     <h3 class="topic-title">Urinary Incontinence</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>SUI</b>: leaks on cough/sneeze/laugh (↑ intra-abdominal pressure); <b>no</b> urgency; urethral hypermobility MC cause.</li>
+      <li><b>UUI/OAB</b>: leaks with <b>detrusor overactivity</b>; triggers = running water, cold weather; urgency always present.</li>
+      <li><b>Overflow</b>: continuous dribble; <b>PVR &gt;200 mL</b> = inadequate emptying; Rx intermittent self-catheterisation.</li>
+      <li><b>Urodynamic discriminator</b>: SUI = leakage with ↑ P.abd, <b>no</b> detrusor contraction (USI); UUI = leakage with detrusor contraction, flat P.abd (DO).</li>
+      <li><b>1st-line SUI</b>: PFMT &gt;3 months; surgical = <b>TVT/mid-urethral sling</b> (MC); duloxetine 20 mg BD = 3rd-line only.</li>
+      <li><b>1st-line UUI</b>: bladder retraining &gt;6 weeks → antimuscarinics (CI in narrow-angle glaucoma/retention) → <b>mirabegron</b> (β3-agonist if CI) → Botox (3rd line).</li>
+      <li><b>Cystometry normals</b>: first desire 150–250 mL; capacity 400–600 mL; residual &lt;50 mL; Qmax &gt;15 mL/s; detrusor pressure &lt;30 cmH₂O.</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Feature</th><th><b>Stress (SUI)</b></th><th><b>Urgency (UUI)</b></th><th><b>Overflow</b></th></tr></thead><tbody>
+      <tr><td>Trigger</td><td>Cough / sneeze / laugh</td><td>Running water, cold, urgency</td><td>None — continuous dribble</td></tr>
+      <tr><td>Urgency?</td><td><b>No</b></td><td><b>Yes</b></td><td>No</td></tr>
+      <tr><td>PVR</td><td>Normal</td><td>Normal</td><td><b>&gt;200 mL</b></td></tr>
+      <tr><td>Urodynamics</td><td>Leakage + ↑P.abd, <b>no</b> detrusor contraction (USI)</td><td>Leakage + <b>detrusor contraction</b>, flat P.abd (DO)</td><td>Large residual; underactive detrusor</td></tr>
+      <tr><td>1st-line Rx</td><td>PFMT; surgical: <b>TVT</b></td><td>Bladder retraining → antimuscarinics → <b>mirabegron</b></td><td>Intermittent self-catheterisation</td></tr>
+    </tbody></table></div>
+
     <div class="box def"><span class="lbl">Definition</span> Involuntary loss of urine; classified as <b>stress (SUI)</b>, <b>urgency/OAB (UUI)</b>, <b>overflow</b>, mixed, or functional.</div>
 
     <table class="cmp">
@@ -2779,6 +3312,23 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <!-- TOPIC 2 -->
   <article class="topic" id="sys-urogyn-t2">
     <h3 class="topic-title">Pelvic Organ Prolapse (POP)</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Strongest uterine support</b>: transverse (<b>cardinal / Mackenrodt's</b>) cervical ligament — broad &amp; round ligaments give NO support.</li>
+      <li><b>MC risk factor</b>: multiparity / traumatic vaginal delivery; recurrence rate ~<b>20–25%</b> even with expert surgery.</li>
+      <li><b>Cystocele</b>: upper 2/3 anterior wall + bladder → anterior colporrhaphy; may need digital reduction to void; get renal USS if severe (exclude <b>hydronephrosis</b>).</li>
+      <li><b>Rectocele</b>: posterior wall + rectum → posterior colpoperineorrhaphy; may need digital reduction to defecate.</li>
+      <li><b>Preferred op for uterine prolapse</b>: <b>vaginal hysterectomy</b>; Manchester op = young patient, family incomplete; pessary = silicone only, change <b>yearly</b>.</li>
+      <li><b>Prolapse + incontinence</b>: combined <b>TVT</b> (95% continence) + anterior colporrhaphy; anterior repair alone only 50% continence.</li>
+      <li><b>Procidentia trap</b>: 3rd-degree = whole uterus through introitus; ulceration + blood-stained/purulent discharge; check for hydronephrosis.</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Type</th><th><b>Structure</b></th><th><b>Key symptom</b></th><th><b>Operation</b></th></tr></thead><tbody>
+      <tr><td><b>Cystocele</b></td><td>Upper 2/3 anterior wall + bladder</td><td>Frequency, incomplete emptying; digital reduction to void</td><td>Anterior colporrhaphy</td></tr>
+      <tr><td><b>Rectocele</b></td><td>Posterior wall + rectum</td><td>Constipation; digital reduction to defecate</td><td>Posterior colpoperineorrhaphy</td></tr>
+      <tr><td><b>Enterocele</b></td><td>Pouch of Douglas (bowel/omentum)</td><td>Dragging / lump</td><td>Resection of sac</td></tr>
+      <tr><td><b>Vault prolapse</b></td><td>Vaginal apex (post-hysterectomy)</td><td>Lump</td><td>Sacrospinous fixation / sacrocolpopexy</td></tr>
+      <tr><td><b>Uterine (procidentia)</b></td><td>Whole uterus through introitus</td><td>Lump; ulceration; purulent discharge</td><td>Vaginal hysterectomy (preferred)</td></tr>
+    </tbody></table></div>
 
     <div class="box def"><span class="lbl">Definition</span> Downward descent of the uterus and/or vagina towards or through the introitus; bladder, urethra, and rectum may be secondarily involved.</div>
 
@@ -2894,6 +3444,16 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-onc-t1">
     <h3 class="topic-title">Cervical Cancer &amp; Screening</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>HPV 16 &amp; 18</b> → &gt;70% of cervical cancers; detectable in 99.7% of cases</li>
+      <li>Most common histology: <b>squamous cell carcinoma (69%)</b>; mean age at diagnosis <b>48 y</b></li>
+      <li>Screening start: <b>age 21</b>; 21–29 y cytology every <b>3 y</b>; 30–65 y co-test every <b>5 y</b>; stop at 65 if 3× negative cytology or 2× negative co-test</li>
+      <li><b>ASC-US</b>: repeat smear / HPV triage / colposcopy — all other abnormals (ASC-H, LSIL, HSIL, AGC, AIS): <b>immediate colposcopy + biopsy</b></li>
+      <li><b>CIN I</b>: watch (reliable pt) or ablate; <b>CIN II/III</b>: immediate LEEP/laser/cryo; <b>cone biopsy</b> if ECC positive or colposcopy unsatisfactory</li>
+      <li>Stage &ge;1b3: <b>chemoradiation only</b> (no surgery); fertility-sparing: <b>trachelectomy</b> (lesion &le;2 cm, no LN mets)</li>
+      <li>Classic trap: <b>postcoital bleeding</b> = cervical cancer until proven otherwise; <b>stage</b> = most important prognostic factor</li>
+    </ul></div>
+
     <div class="box def"><span class="lbl">Definition</span>
       Malignancy of the cervix; <b>HPV detectable in 99.7%</b> — <b>types 16 &amp; 18</b> account for &gt;70% of cases; most common histology is <b>squamous cell carcinoma (69%)</b>.
     </div>
@@ -2939,6 +3499,16 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   <article class="topic" id="sys-onc-t2">
     <h3 class="topic-title">Endometrial Cancer</h3>
 
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Unopposed oestrogen</b> → Type 1 (endometrioid, 80–85%); peak age <b>61 y</b>; 75% postmenopausal</li>
+      <li>Buzzword trigger: any <b>postmenopausal bleeding (PMB)</b> → endometrial biopsy mandatory</li>
+      <li>TVU cut-off: endometrial thickness <b>&gt;3 mm</b> in PMB → D&amp;C / hysteroscopy</li>
+      <li>Hyperplasia trap: <b>complex with atypia → 30%</b> risk of cancer (complex without atypia = 3%)</li>
+      <li>Stage I Rx: <b>TAH + BSO + LN dissection + post-op RT</b></li>
+      <li>Prognostic order: <b>stage &gt; grade &gt; myometrial invasion &gt; age &gt; tumour size</b></li>
+      <li>Prognosis best-to-worst: <b>endometrial &gt; breast &gt; cervix &gt; ovary</b></li>
+    </ul></div>
+
     <div class="box def"><span class="lbl">Definition</span>
       Malignancy of the endometrium; peak age <b>61 years</b>; 75% in postmenopausal women; driven by <b>unopposed oestrogen</b> (Type 1).
     </div>
@@ -2981,6 +3551,24 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   ════════════════════════════════════════════════ -->
   <article class="topic" id="sys-onc-t3">
     <h3 class="topic-title">Ovarian Cancer</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>Worst prognosis</b> of all female genital tract cancers; 75% present at <b>stage 3</b> (silent disease)</li>
+      <li>Marker map: <b>CA-125</b> = serous epithelial; <b>AFP</b> = yolk sac; <b>LDH</b> = dysgerminoma; <b>HCG</b> = choriocarcinoma; <b>Inhibin-B</b> = granulosa cell</li>
+      <li><b>RMI = CA-125 × U × M</b>; U: pre-menopausal = 1, post-menopausal = 3; M: 0–1 features = 1, 2–5 features = 3; RMI &gt;250 → staging laparotomy in cancer centre</li>
+      <li>Chemo indication: <b>stage 1c and above</b>; platinum + Taxol, 6 cycles × 3-weekly</li>
+      <li>5-year survival: <b>stage 1 = 95%</b>, stage 4 = 20%; <b>BRCA1</b> = 50% lifetime ovarian Ca risk</li>
+      <li>Classic traps: <b>fibroma</b> → Meigs' syndrome; <b>mucinous rupture</b> → pseudomyxoma peritonei; <b>Krukenberg</b> = always bilateral mets (stomach/colon)</li>
+      <li><b>Dysgerminoma</b> = MC malignant germ cell tumour; very <b>radiosensitive</b>; spreads via lymphatics</li>
+    </ul>
+    <table class="cmp mini"><thead><tr><th>Tumour</th><th><b>Marker</b></th><th><b>Key pearl</b></th></tr></thead><tbody>
+      <tr><td>Epithelial serous</td><td><b>CA-125</b></td><td>MC overall; bilateral; around menopause</td></tr>
+      <tr><td>Dysgerminoma</td><td><b>LDH</b></td><td>MC malignant germ cell; very radiosensitive; lymphatic spread</td></tr>
+      <tr><td>Yolk sac</td><td><b>AFP</b></td><td>Highly malignant; young women</td></tr>
+      <tr><td>Choriocarcinoma</td><td><b>HCG</b></td><td>Germ cell origin</td></tr>
+      <tr><td>Granulosa cell</td><td><b>Inhibin-B</b></td><td>Secretes oestrogen → endometrial hyperplasia</td></tr>
+      <tr><td>Fibroma</td><td>—</td><td><b>Meigs' syndrome</b> (ascites + hydrothorax)</td></tr>
+    </tbody></table></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       Worst prognosis of all female genital tract cancers; 75% present at <b>stage 3</b> (silent disease); <b>serous cystadenocarcinoma</b> is the most common malignant epithelial type.
@@ -3025,6 +3613,16 @@ mark{background:#ffe680;color:#000;padding:0 2px;border-radius:2px}
   ════════════════════════════════════════════════ -->
   <article class="topic" id="sys-onc-t4">
     <h3 class="topic-title">Gynaecological Surgeries</h3>
+
+    <div class="compact"><span class="lbl">Must-know</span><ul>
+      <li><b>D&amp;C</b> = most common gynae op; MC therapeutic indication: remove <b>RPOC</b>; most serious acute complication: <b>uterine perforation</b></li>
+      <li>D&amp;C chronic traps: excessive <b>dilatation</b> → cervical incompetence; excessive <b>curettage</b> → Asherman's syndrome</li>
+      <li><b>Cone biopsy</b> indications: unsatisfactory colposcopy, lesion to endocervix, ECC positive; avoid in pregnancy (&gt;500 mL bleeding risk)</li>
+      <li>Preferred hysterectomy route: <b>vaginal</b> (less morbidity, shorter stay, faster recovery, more cost-effective)</li>
+      <li>Radical hysterectomy complications: <b>ureterovaginal fistula 2–3%</b>, bladder atony 3%</li>
+      <li><b>Hysteroscopy cannot</b> assess adenomyosis, tubal pathology, or external uterine contour — cavity only</li>
+      <li>Subtotal hysterectomy trap: cervix retained → risk of <b>cyclical bleeding</b></li>
+    </ul></div>
 
     <div class="box def"><span class="lbl">Definition</span>
       Core gynaecological operations: D&amp;C, hysterectomy (total/radical/subtotal), myomectomy, conization, and endoscopic procedures (laparoscopy, hysteroscopy, colposcopy).
@@ -3617,5 +4215,19 @@ _w('fcShuffle',function(){buildDeck();renderCard();}); _w('fcScope',function(){f
 document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeNum(); closeFC(); }
   else if(document.getElementById('fcModal').classList.contains('show')){
     if(e.key==='ArrowRight')fcGo(1); else if(e.key==='ArrowLeft')fcGo(-1); else if(e.key===' '||e.key==='Enter'){e.preventDefault();fcFlip();} } });
+// ---- Full / Compact mode ----
+var MODEKEY='obgyn_mode_v1';
+function setMode(compact){
+  document.body.classList.toggle('mode-compact',compact);
+  var lbl = compact ? '&#128214; Full mode' : '&#9889; Compact mode';
+  var b1=document.getElementById('modeToggle'); if(b1) b1.innerHTML=lbl;
+  var b2=document.getElementById('modeToggle2'); if(b2) b2.innerHTML=lbl;
+  document.querySelectorAll('.mp-btn').forEach(function(b){ b.classList.toggle('active',(b.getAttribute('data-mode')==='compact')===compact); });
+  try{ localStorage.setItem(MODEKEY, compact?'1':'0'); }catch(e){}
+}
+function toggleMode(){ var now=!document.body.classList.contains('mode-compact'); setMode(now); track('mode_'+(now?'compact':'full')); }
+_w('modeToggle',toggleMode); _w('modeToggle2',toggleMode);
+document.querySelectorAll('.mp-btn').forEach(function(b){ b.addEventListener('click',function(){ var c=b.getAttribute('data-mode')==='compact'; setMode(c); track('mode_'+(c?'compact':'full')); }); });
+(function(){ var s=false; try{ s=localStorage.getItem(MODEKEY)==='1'; }catch(e){} setMode(s); })();
 </script>
 </body></html>
